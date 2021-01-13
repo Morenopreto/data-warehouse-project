@@ -1,0 +1,19 @@
+.input {
+  background-color: #f8f9fa;
+}
+
+.card {
+  height: 80vh;
+  min-height: 340px;
+  margin: 10vh 20%;
+  padding: 30px 10%;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+.mg10-4 {
+  margin: 50px 4%;
+}
+.mg10-4 {
+  margin: 10px 4%;
+}

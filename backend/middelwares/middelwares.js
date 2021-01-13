@@ -1,5 +1,18 @@
-const { response } = require('express');
 const { jwt, tokenKey } = require('../jwt.js');
+const sequelize = require('../seq-conexion.js');
+const response500 = {
+    "errors": [
+        {
+            'code': 500,
+            'description': 'Internal Server error',
+            'date': new Date()
+        }
+    ], "data": [
+        {
+            "isAuthenticated":false
+        }
+    ]
+};
 //CHEQUEAR MIDDELWARESS QUE SON LOS DE DELILAH RESTO!!! RESPONSES MEJORADAS
 function validacionExistencia(req, res, next) {
     (async () => {
@@ -25,21 +38,39 @@ function validacionjwt(req, res, next) {
         const token = req.headers.authorization.split(' ')[1];
 
         const verificarToken = jwt.verify(token, tokenKey);
+
         if (verificarToken) {
             req.infoToken = verificarToken;
             console.log('validacionJWT next!')
             return next();
+        } else {
+            let response = {
+                "errors": [
+                    {
+                        'code': 401,
+                        'description': 'Incorrect access token',
+                        'date': new Date()
+                    }
+                ]
+            }
+            res.status(401).send(response)
         }
     } catch (error) {
         console.log(error);
+
         let response = {
-            'code': 500,
-            'description': 'Internal server error',
-            'date': new Date()
+            "errors": [
+                {
+                    'code': 500,
+                    'description': 'Internal server error',
+                    'date': new Date()
+                }
+            ]
+
         }
         res.status(500).send(response)
     }
-    next();
+    
 
 }
 
@@ -72,4 +103,4 @@ function validacionAdmin(req, res, next) {
 
 }
 
-module.exports = { validacionAdmin, validacionExistencia, validacionjwt };
+module.exports = { validacionAdmin, validacionExistencia, validacionjwt,response500 };

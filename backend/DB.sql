@@ -1,74 +1,106 @@
-CREATE DATABASE d-warehouse;
-USE d-warehouse;
+CREATE DATABASE `data_warehouse`;
+USE `data_warehouse`;
 -- TABLA USUARIOS CORRECTA PARA DATA WAREHOUSE
-CREATE TABLE usuarios(
-    user_id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    fullName varchar(30) NOT NULL,
-    mail varchar(30) NOT NULL UNIQUE,
-    -- direccion varchar(50) NOT NULL,
-    admin int(2) NOT NULL,
-    phone int NOT NULL,
-    username varchar(30) NOT NULL,
-    pass varchar(30) NOT NULL
-);
+CREATE TABLE `users`(
+    `user_id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `name` varchar(30) NOT NULL,
+    `surname` varchar(30) NOT NULL,
+    `mail` varchar(200) NOT NULL UNIQUE,
+    `pass` varchar(18) NOT NULL,
+    `admin` tinyint(1) NOT NULL,
+    `phone` int NOT NULL,
+    `active`   tinyint(1) NOT NULL
 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- tablas regions, countries & cities Correctas para data warehouse
-CREATE TABLE regions(
-    region_id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    region_name varchar(30) NOT NULL
-    );
+CREATE TABLE `regions`(
+    `region_id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `region_name` varchar(30) NOT NULL,
+    `active`   tinyint(1) NOT NULL
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE countries( 
-    countrie_id INT NOT NULL,
-    countrie_name varchar(30) NOT NULL,
+CREATE TABLE `countries`(
+    `country_id` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `country_name` varchar(30) NOT NULL,
+    `region_id` int NOT NULL,
+    `active`   tinyint(1) NOT NULL,
     FOREIGN KEY (region_id)  REFERENCES regions(region_id)
-     
-);
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `cities`(
+    `city_id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `city_name` varchar(30) NOT NULL,
+    `country_id` INT NOT NULL,
+    `active`   tinyint(1) NOT NULL,
+    FOREIGN KEY (country_id)  REFERENCES countries(country_id)
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE cities( 
-    city_id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    city_name varchar(30) NOT NULL,
-    FOREIGN KEY (countrie_id)  REFERENCES countries(countrie_id)
-
-);
-
---tabla companias correcta
-CREATE TABLE companies(
-    company_id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    company_name varchar(30) NOT NULL,
-    company_address varchar(50) NOT NULL,
-    mail varchar(30) NOT NULL,
-    phone int NOT NULL,
+CREATE TABLE `companies`(
+    `company_id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `company_name` varchar(30) NOT NULL,
+    `company_address` varchar(50) NOT NULL,
+    `mail` varchar(30) NOT NULL,
+    `phone` int NOT NULL,
+    `city_id` int NOT NULL,
+    `active`   tinyint(1) NOT NULL,
     FOREIGN KEY (city_id)  REFERENCES cities(city_id)
-    
-    
-);
--- HASTA ACA INFO CORRECTA PARA DATA WAREHOUSE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE contacts( 
-    contact_id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    position varchar(20) NOT NULL,
-    fullName varchar(30) NOT NULL,
+
+CREATE TABLE `contacts`(
+    `contact_id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `name` varchar(30) NOT NULL,
+    `surname` varchar(30) NOT NULL,
+    `position` varchar(50) NOT NULL,
+    `mail` varchar(50) NOT NULL,
+    `interest` varchar(100) NOT NULL,
+    `company_id` int NOT NULL,
+    `city_id` int NOT NULL,
+    `user_id` int NOT NULL,
+    `active`   tinyint(1) NOT NULL,
     FOREIGN KEY (company_id)  REFERENCES companies(company_id),
-    FOREIGN KEY (city_id) REFERENCES cities(city_id)
+    FOREIGN KEY (city_id) REFERENCES cities(city_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `changes`{
+    `change_id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    `modified_date` datetime DEFAULT(getdate()),
+    `modified_by` varchar(30) NOT NULL,
+    `modified_table` varchar(30) NOT NULL,
+    `modified_id`int NOT NULL
+}
+
+INSERT INTO users (name, surname, mail, admin, phone, active, pass) VALUES ('moreno', 'preto', 'moreno.preto@live.com', 1, 1165478821, 1, 123456);
+INSERT INTO users (name, surname, mail, admin, phone, active, pass) VALUES ('Gaspar', 'Aragon', 'gaspar.aragon@live.com', 1, 123123123, 1, 012345);
+INSERT INTO regions (region_name,active) VALUES ('Am. del norte',1);
+INSERT INTO regions (region_name,active) VALUES ('Am. del sur',1);
+INSERT INTO regions (region_name,active) VALUES ('CentroAmerica',1);
+INSERT INTO countries (country_name,region_id,active) VALUES ('Argentina',2,1);
+INSERT INTO countries (country_name,region_id,active) VALUES ('Brasil',2,1);
+INSERT INTO countries (country_name,region_id,active) VALUES ('Chile',2,1);
+INSERT INTO countries (country_name,region_id,active) VALUES ('Mexico',1,1);
+INSERT INTO countries (country_name,region_id,active) VALUES ('Canada',1,1);
+INSERT INTO countries (country_name,region_id,active) VALUES ('Panama',3,1);
+INSERT INTO countries (country_name,region_id,active) VALUES ('Costa Rica',3,1);
+INSERT INTO cities (city_name,country_id,active) VALUES ('Bs. As.',1,1);
+INSERT INTO cities (city_name,country_id,active) VALUES ('Cordoba',1,1);
+INSERT INTO cities (city_name,country_id,active) VALUES ('Sao Paulo',2,1);
+INSERT INTO cities (city_name,country_id,active) VALUES ('Santiago',3,1);
+INSERT INTO cities (city_name,country_id,active) VALUES ('Mexico D.F',4,1);
+INSERT INTO cities (city_name,country_id,active) VALUES ('Alberta',5,1);
+INSERT INTO cities (city_name,country_id,active) VALUES ('Panama City',6,1);
+INSERT INTO cities (city_name,country_id,active) VALUES ('San Jose',7,1);
+INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('Plus Cargo','Av. Siempre viva 123','plus@cargo.com',1122334455,5,1);
+INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('Del Beagle','De los nires 3038','del@beagle.com',5544336677,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Lucas', 'Barria', 'CEO','lucas.barria@live.com','None',1,1,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Jose', 'Romero victoria', 'CEO','jrm@live.com','None',1,5,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Juan', 'Vazquez', 'CEO','vazqjuan@live.com','None',2,1,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('inaki', 'Igarreta', 'CFO','igarro@live.com','None',2,1,2,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Mateo', 'Del Mastro', 'Sales Executive','el.macho@live.com','None',2,1,2,1);
 
 
-);
-INSERT INTO `usuarios` (nombrecompleto, mail, direccion,telefono,usuario,contrasena,administrador) VALUES ('Administrador', 'admin@live.com', 'av. Siempre viva 123',1512345678,'admin','admin', 1);
-
-INSERT INTO `estados` (estado_pedido) VALUES ('nuevo');
-INSERT INTO `estados` (estado_pedido) VALUES ('confirmado');
-INSERT INTO `estados` (estado_pedido) VALUES ('preparando');
-INSERT INTO `estados` (estado_pedido) VALUES ('enviado');
-INSERT INTO `estados` (estado_pedido) VALUES ('entregado');
-INSERT INTO `estados` (estado_pedido) VALUES ('eliminado');
-
--- CREACION DE PRODUCTOS PARA PRUEBA DE ENDOPOINTS
-INSERT INTO `productos` (nombre_producto, descripcion, precio ,Img_url,active) VALUES ('Chesseburger', 'hamburguesa simple con cheddar', 250 ,'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F9%2F2019%2F09%2FCheeseburger-Cheeseburger-Deals-FT-Blog0919.jpg', 1);
-INSERT INTO `productos` (nombre_producto, descripcion, precio ,Img_url,active) VALUES ('Doble Chesseburger', 'hamburguesa doble con cheddar', 350 ,'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F9%2F2019%2F09%2FCheeseburger-Cheeseburger-Deals-FT-Blog0919.jpg', 1);
-INSERT INTO `productos` (nombre_producto, descripcion, precio ,Img_url,active) VALUES ('Ensalada', 'Ensalada pollo grille, repollo, lechuga y tomate  ', 350 ,'https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F9%2F2019%2F09%2FCheeseburger-Cheeseburger-Deals-FT-Blog0919.jpg', 1);
+SELECT contacts.name, contacts.surname, contacts.position, contacts.mail, contacts.interest, cities.city_name, countries.country_name, regions.region_name, companies.company_name FROM contacts INNER JOIN cities ON contacts.city_id = cities.city_id INNER JOIN countries ON countries.country_id = cities.country_id  INNER JOIN regions ON countries.region_id = regions.region_id INNER JOIN companies ON companies.company_id = contacts.company_id WHERE contacts.active = 1 and user_id = ?
 
 
