@@ -1,10 +1,8 @@
-
 const express = require('express');
 let router = express.Router();
 const { jwt, tokenKey } = require('../jwt.js');
-const { validacionAdmin, validacionjwt, response500 } = require('../middelwares/middelwares')
+const { validacionAdmin, validacionjwt, response500 } = require('../middelwares/middelwares');
 const sequelize = require('../seq-conexion.js');
-
 
 // API
 // USUARIOS
@@ -12,18 +10,17 @@ const sequelize = require('../seq-conexion.js');
 // POST /usuarios – JWT - Administradores OK
 // PATCH /usuarios/{usuario_id} - JWT - Administradores OK
 // DELETE /usuarios/{usuario_id} – JWT – Administradores OK
-// POST /users/login OK
+// POST /users/login OKz
 
 
 // CREATE NEW USERS
-router.post('/', validacionjwt, validacionAdmin, async (req, res) => {
-    // router.post('/', async (req, res) => {
+router.post('/newUser', validacionjwt, validacionAdmin, async (req, res) => {
+    console.log(req.body)
     const { name, surname, mail, pass, admin, phone } = req.body;
 
-
-    if (!name || !surname || !mail || !pass || !admin || !phone) {
+    if (!name || !surname || !mail || !pass || !toString(admin) || !phone) {
         const response = {
-            "request info": [
+            "requestInfo": [
                 {
                     'code': 400,
                     'description': 'name, surname, mail, pass, admin, phone cant be undefined',
@@ -34,12 +31,12 @@ router.post('/', validacionjwt, validacionAdmin, async (req, res) => {
         res.status(400).json(response);
     } else {
         try {
-            await sequelize.query('INSERT INTO companies (name, surname, mail, pass, admin, phone, active) VALUES (?,?,?,?,?,?)', {
-                replacements: [name, surname, mail, pass, admin, phone, 0],
+            await sequelize.query('INSERT INTO users (name, surname, mail, pass, admin, phone, active) VALUES (?,?,?,?,?,?,?)', {
+                replacements: [name, surname, mail, pass, admin, phone, 1],
                 type: sequelize.QueryTypes.INSERT
             })
             const response = {
-                "request info": [
+                "requestInfo": [
                     {
                         'code': 200,
                         'description': 'new user added correctly!',
@@ -48,18 +45,37 @@ router.post('/', validacionjwt, validacionAdmin, async (req, res) => {
                 ]
             }
             res.status(200).json(response)
-        } catch (error) {
-            res.status(500).json(response500)
+        } catch (err) {
+            if (err.original.code === 'ER_DUP_ENTRY') {
+                const response = {
+                    "requestInfo": [
+                        {
+                            'code': 409,
+                            'description': 'duplicated conflict error!',
+                            'date': new Date(),
+                            'error': 'Duplicated'
+                        }
+                    ]
+                }
+                res.status(409).json(response)
+            } else {
+                res.status(500).json(response500)
+            }
+            console.log(err.original.code)
         }
     }
 })
 
 // BRING ALL USERS
 router.get('/', validacionjwt, validacionAdmin, async (req, res) => {
+    const { mail } = req.query;
+    console.log(mail)
     try {
-        const data = await sequelize.query('SELECT * FROM users WHERE  active = 1', {
+        const data = await sequelize.query('SELECT user_id,name,surname, mail,admin, phone FROM users WHERE mail!=? AND active = 1', {
+            replacements: [mail],
             type: sequelize.QueryTypes.SELECT
         })
+        console.log(data)
         const response = {
             "request info": [
                 {
@@ -76,27 +92,27 @@ router.get('/', validacionjwt, validacionAdmin, async (req, res) => {
         res.status(500).json(response500)
     }
 })
-router.get('/', validacionjwt, validacionAdmin, async (req, res) => {
-    try {
-        const data = await sequelize.query('SELECT * FROM users WHERE  active = 1', {
-            type: sequelize.QueryTypes.SELECT
-        })
-        const response = {
-            "request info": [
-                {
-                    'code': 200,
-                    'description': 'success!',
-                    'date': new Date()
-                }
-            ],
-            "data": data
-        }
-        res.status(200).json(response)
-    } catch (error) {
-        console.log(error)
-        res.status(500).json(response500)
-    }
-})
+// router.get('/', validacionjwt, validacionAdmin, async (req, res) => {
+//     try {
+//         const data = await sequelize.query('SELECT * FROM users WHERE  active = 1', {
+//             type: sequelize.QueryTypes.SELECT
+//         })
+//         const response = {
+//             "request info": [
+//                 {
+//                     'code': 200,
+//                     'description': 'success!',
+//                     'date': new Date()
+//                 }
+//             ],
+//             "data": data
+//         }
+//         res.status(200).json(response)
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json(response500)
+//     }
+// })
 // //LOG IN
 router.post('/login', async (req, res) => {
     const { pass, mail } = req.body
@@ -141,7 +157,8 @@ router.post('/login', async (req, res) => {
                     ,
                     "data": {
                         "user_fullName": `${data.name} ${data.surname}`,
-                        "admin": (data.admin) ? data.admin : data.admin,
+                        "mail": data.mail,
+                        "admin": data.admin,
                         "token": req.infoToken,
                         "isAuthenticated": true
                     }
@@ -254,7 +271,7 @@ router.patch('/:user_id', validacionjwt, validacionAdmin, async (req, res) => {
     }
 })
 
-router.delete('/:user_id', validacionjwt, validacionAdmin, async (req, res) => {
+router.delete('/:user_id/delete', validacionjwt, validacionAdmin, async (req, res) => {
 
     const { eliminado } = req.query
     let eliminadoBool = JSON.parse(eliminado.toLowerCase());

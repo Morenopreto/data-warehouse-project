@@ -5,7 +5,7 @@ import { LogInContext } from '../context/logInContext';
 
 function Login() {
 
-    const { LogIn } = useContext(LogInContext)
+    const { LogIn, logInStatus } = useContext(LogInContext)
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
@@ -13,7 +13,9 @@ function Login() {
     const validateForm = () => {
         return !!email.length && !!pass.length
     }
-
+    // document.getElementsByTagName('form')[0].addEventListener('submit',()=>{
+    //     console.log('se submitio')
+    // })
     return (
         <Card className='card'>
             <h4>Sign In OnlyGodKnows</h4>
@@ -28,7 +30,7 @@ function Login() {
                     <Form.Control className='input' type="password" value={pass} placeholder="Password" onChange={(e) => setPass(e.target.value)} />
                 </Form.Group>
             </Form>
-            <Button className="mg10-4" variant="primary" disabled={!validateForm()} onClick={()=>LogIn(email, pass)}>Log In</Button>
+            <Button className="mg10-4 buttons" variant="primary" disabled={!validateForm()} onClick={() => LogIn(email, pass)}>{(!logInStatus)?'Iniciar Sesion':'Iniciando'}</Button>
             {/* </Card.Body> */}
         </Card>
 

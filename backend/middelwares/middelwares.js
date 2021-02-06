@@ -9,7 +9,7 @@ const response500 = {
         }
     ], "data": [
         {
-            "isAuthenticated":false
+            "isAuthenticated": false
         }
     ]
 };
@@ -33,7 +33,11 @@ function validacionExistencia(req, res, next) {
 
 }
 function validacionjwt(req, res, next) {
-    console.log('valido jwt')
+
+
+    const tokeen = req.headers.authorization.split(' ')[1];
+    const verificarToken = jwt.verify(tokeen, tokenKey);
+    console.log(verificarToken)
     try {
         const token = req.headers.authorization.split(' ')[1];
 
@@ -45,32 +49,40 @@ function validacionjwt(req, res, next) {
             return next();
         } else {
             let response = {
-                "errors": [
-                    {
-                        'code': 401,
-                        'description': 'Incorrect access token',
-                        'date': new Date()
-                    }
-                ]
+                "errors":
+                {
+                    'code': 401,
+                    'description': 'Incorrect access token',
+                    'date': new Date()
+                },
+                "data": {
+                    "token": null,
+                    "isAuthenticated": false
+                }
+
             }
-            res.status(401).send(response)
+            res.status(401).json(response)
         }
     } catch (error) {
         console.log(error);
 
         let response = {
-            "errors": [
-                {
-                    'code': 500,
-                    'description': 'Internal server error',
-                    'date': new Date()
-                }
-            ]
+            "errors":
+            {
+                'code': 500,
+                'description': 'JWT Error',
+                'date': new Date()
+            },
+            "data": {
+                "token": null,
+                "isAuthenticated": false
+            }
+
 
         }
-        res.status(500).send(response)
+        res.status(500).json(response)
     }
-    
+
 
 }
 
@@ -82,7 +94,7 @@ function validacionAdmin(req, res, next) {
             'description': 'You must log in to continue',
             'date': new Date()
         }
-        res.status(400).send(response)
+        res.status(400).json(response)
     } else {
         const token = req.headers.authorization.split(' ')[1];
         const verificado = jwt.verify(token, tokenKey);
@@ -103,4 +115,4 @@ function validacionAdmin(req, res, next) {
 
 }
 
-module.exports = { validacionAdmin, validacionExistencia, validacionjwt,response500 };
+module.exports = { validacionAdmin, validacionExistencia, validacionjwt, response500 };

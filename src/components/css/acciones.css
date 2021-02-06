@@ -2,6 +2,11 @@
     position: absolute;
     right: 50px;
 }
+.modal-ctn{
+    width: 80%;
+    margin: 50px 10%;
+    max-width: none !important;
+}
 /* .acciones-display > .pruebro:active{
     display: none;
 } */

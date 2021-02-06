@@ -2,8 +2,8 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  background-color: cadetblue;
-  padding-top: 20px;
+  background: #f7f8fc;
+  padding-top: 45px !important;
 }
 .navbarUl {
   list-style: none;
@@ -12,17 +12,31 @@
   justify-self: flex-end;
   justify-content: space-between;
   width: 35%;
+  margin-right: 65px;
 }
 .navbarLi {
   text-decoration: none;
 }
 .navlinkLi {
   text-decoration: none;
-  color: white;
-  font-weight: bold;
+  color: #273152;
+  font-weight: 400;
+  font-size: 17px;
 }
 .navlinkLi:hover {
-  color: white;
-  font-size: 1.1rem;
+  color: #273152;
+  font-size: 1.01rem;
+  border-radius: 4px;
+  font-weight: 500;
   text-decoration: none;
+  border-bottom: 3px solid rgba(90, 217, 172, 0.5);
 }
+.act-navlinkLi {
+  color: #273152;
+  font-size: 1.01rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 3px solid rgba(90, 217, 172, 0.5);
+}
+

@@ -1,110 +1,82 @@
-import React, { useContext, useState } from 'react';
-import { LogInContext } from '../context/logInContext'
+import { useLocation } from 'react-router-dom';
+import { MdArrowDropDown, MdFileUpload, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { Table } from 'react-bootstrap';
-import { BsArrowUpDown } from 'react-icons/bs';
-import UsersRows from './usersRow'
-import './css/table.css'
+import { BsArrowUpDown } from 'react-icons/bs'
+import TableRows from './TableRows';
 
-function TableComp() {
-    const { infoContacts } = useContext(LogInContext);
-    const [hiddenSearch, setHiddenSearch] = useState(true);
-    const [checkedState, setCheckedState] = useState(false);
 
-    const hiddenSearchModify = (e) => {
-        console.log(e.target.localName === 'input' && hiddenSearch === false)
-        if (e.target.localName === 'input' && hiddenSearch === false) {
-            console.log('entro')
-            setHiddenSearch(true)
-        } else {
-            hiddenSearch ? setHiddenSearch(false) : setHiddenSearch(true);
-        }
-    }
-    const changeCheckedState = (e) => {
-        console.log('este ' + e.target.checked)
-        setCheckedState(e.target.checked);
+function TableComp({ info, pag, displayEditContacts }) {
+    // console.log('info')
+    // console.log(info)
+    // console.log('info')
+    // let paginationArrowLeft;
+    // let paginationArrowRight;
+    //VER COMO ADAPTAR LAS FUNCIONES PARA QUE SEAN GENERICAS!
+    const location = useLocation();
 
-    }
+    // if (pag.Page > 1) { paginationArrowLeft = <MdKeyboardArrowLeft onClick={() => { GetUserData(tokenState, (pagination.Page - 1) * 9) }} /> }
+    //     if (pag.Page != pag.PageCount) { paginationArrowRight = <MdKeyboardArrowRight onClick={() => GetUserData(tokenState, pagination.Page * 10 + 1)} /> }
 
     return (
         <div>
-            <h1>Contactos</h1>
-            <div className='div-input-search'>
-                <input type='text' className='input-search' onClick={(e) => hiddenSearchModify(e)} />
-                <i class="fas fa-caret-down" onClick={(e) => hiddenSearchModify(e)}></i>
-            </div>
-            <div>
-                <ul className='search-ul-blue-pills'>
-                    <li className='search-blue-pill'>Argentina</li>
-                    <li className='search-blue-pill'>Pluscargo</li>
-                </ul>
-            </div>
-            <form className='search-form' hidden={hiddenSearch}>
-                <div className='search-form-divs'>
-                    <label>Nombre contacto:</label>
-                    <input type='text' className='search-form-inputs' placeholder='Introduce el nombre del contacto.' />
-                </div>
-                <div className='search-form-divs'>
-                    <label>Cargo:</label>
-                    <input type='text' className='search-form-inputs' placeholder='Introduce el cargo del contacto.' />
-                </div>
-                <div className='search-form-divs'>
-                    <label>Pais/Region:</label>
+            <Table striped bordered hover id='tabla'>
 
-                    <select name="country" className='search-form-selects' id="countries">
-                        <option value="volvo">Todos</option>
-                        <option value="volvo">Argentina</option>
-                        <option value="saab">Brasil</option>
-                    </select>
-                </div>
-                <div className='search-form-divs'>
+                {(location.pathname === '/contacts') ? (
+                    <thead>
+                        <tr>
+                            <th className='row-ex-ch'>ID </th>
+                            <th className='row-gde'>Contacto  </th>
+                            <th className='row-mdno'>Pais/Region </th>
+                            <th className='row-mdno'>Compania </th>
+                            <th className='row-mdno'>Cargo </th>
+                            <th className='row-mdno'>Interes </th>
+                            <th className='row-ex-ch'>Acciones</th>
+                        </tr>
+                    </thead>
 
-                    <label>Compania:</label>
-                    <select name="company" className='search-form-selects' id="companies">
-                        <option value="volvo">Todas</option>
-                        <option value="volvo">Pluscargo</option>
-                        <option value="audi">Moontravel</option>
-                    </select>
-                </div>
-                <div className='search-form-divs'>
 
-                    <label>Canal Favorito:</label>
-                    <select name="favourite" className='search-form-selects' id="favourites">
-                        <option value="volvo">Cualquiera</option>
-                        <option value="mercedes">whataspa</option>
-                        <option value="audi">textmessage</option>
-                    </select>
-                </div>
-                <div className='search-form-divs'>
-                    <label>Interes:</label>
-                    <select name="interest" className='search-form-selects' id="interests">
-                        <option value="volvo">Cualquiera</option>
-                        <option value="mercedes">ni idea</option>
-                        <option value="audi">otra opcion</option>
-                    </select>
-                </div>
 
-            </form>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th className='row-ex-ch'><input type="checkbox" onChange={(e) => changeCheckedState(e)} /></th>
-                        <th className='row-gde'>Contacto <BsArrowUpDown /> </th>
-                        <th className='row-mdno'>Pais/Region <BsArrowUpDown /></th>
-                        <th className='row-mdno'>Compania <BsArrowUpDown /></th>
-                        <th className='row-mdno'>Cargo <BsArrowUpDown /></th>
-                        <th className='row-ch-mdno'>Canal Preferido <BsArrowUpDown /></th>
-                        <th className='row-mdno'>Interes <BsArrowUpDown /></th>
-                        <th className='row-ex-ch'>Acciones</th>
-                    </tr>
-                </thead>
+                ) : (location.pathname === '/users') ? (
+                    <thead>
+                        <tr>
+                            <th className='row-ex-ch'>User ID </th>
+                            <th className='row-mdno'> Datos Usuario </th>
+                            <th className='row-mdno'>Telefono </th>
+                            <th className='row-gde'> Permisos </th>
+                            <th className='row-ex-ch'>Acciones</th>
+
+
+                        </tr>
+                    </thead>
+
+                ) : (
+                            <thead>
+                                <tr>
+                                    <th className='row-ex-ch'>ID </th>
+                                    <th className='row-mdno'>Nombre </th>
+                                    <th className='row-mdno'>Ciudad</th>
+                                    <th className='row-mdno'> Direccion </th>
+                                    <th className='row-mdno'>Telefono </th>
+                                    {/* <th className='row-mdno'> Mail </th> */}
+                                    <th className='row-ex-ch'>Acciones</th>
+
+                                </tr>
+                            </thead>
+
+                        )}
+
+
                 <tbody>
-                    {infoContacts?.map((data, key) => (
-                        <UsersRows key={key} data={data} checkedState={checkedState} />
-                    )
-
-                    )}
+                    {info?.map((data, key) => (
+                        <TableRows key={key} data={data} where={location.pathname} displayEditContacts={displayEditContacts} />
+                    ))}
                 </tbody>
             </Table>
+            {/* <div>
+                <label> {pagination.Page} - {pagination.PageCount} Pags. </label>
+                <span>{paginationArrowLeft}</span>
+                <span>{paginationArrowRight}</span>
+            </div> */}
         </div>
     )
 }

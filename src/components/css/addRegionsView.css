@@ -1,0 +1,23 @@
+
+.showAddInput{
+    display: inline-block;
+    width: 50%;
+    padding: 10px 0 0 28px;;
+}
+.hideAddInput{
+    display: none;
+}
+.show{
+display: block;
+}
+/* .addButton{
+    background-color: #fff;
+    outline: none;
+    border: none;
+    color: #273152;
+    padding: 28px 0 34px 0;
+}
+.addButton:focus, .addButton:hover{
+    outline: none;
+    font-weight: 500;
+} */

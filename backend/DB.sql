@@ -94,9 +94,44 @@ INSERT INTO cities (city_name,country_id,active) VALUES ('Panama City',6,1);
 INSERT INTO cities (city_name,country_id,active) VALUES ('San Jose',7,1);
 INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('Plus Cargo','Av. Siempre viva 123','plus@cargo.com',1122334455,5,1);
 INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('Del Beagle','De los nires 3038','del@beagle.com',5544336677,1,1);
+INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('Frodas','thames 477','frodas@frodito.com',5544336677,3,1);
+INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('Chandon','chababuco 2637','alcohol@chandon.com',5544336677,5,1);
+INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('El purgatorio bar','salvador 238','secresSociety@purgatorio.com',5544336677,6,1);
+INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('Aerolab','cramer 278','aero@lab.com',5544336677,2,1);
+INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('AWE Systems','balbastro1729','AWE@systems.com',5544336677,7,1);
+INSERT INTO companies (company_name,company_address,mail,phone,city_id,active) VALUES ('Los Yamanas','el cano 123','reservas@yamanas.com',5544336677,3,1);
 INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Lucas', 'Barria', 'CEO','lucas.barria@live.com','None',1,1,1,1);
-INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Jose', 'Romero victoria', 'CEO','jrm@live.com','None',1,5,1,1);
-INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Juan', 'Vazquez', 'CEO','vazqjuan@live.com','None',2,1,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Alberto', 'Rodriguez Saa', 'CEO','jrm@live.com','None',1,5,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Juan', 'Vazquez', 'Vendedor','vazqjuan@live.com','None',2,1,1,1);
+
+
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Alejo','Del mastro','vendedor','AlejoDel mastro@live.com','telegram',7,1,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Francisco','Marscarenhas','Abogado','FranciscoMarscarenhas@live.com','telegram',1,1,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Oliver','Allen','Gerente New verticals','OliverAllen@live.com','whatsapp',7,4,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Federico','Diaz Silvera', 'KAM New verticals','FedericoDiaz Silvera@live.com','whatsapp',4,4,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Francisco','Rampone','Jefe ventas','FranciscoRampone@live.com','whatsapp',1,5,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Luciano','Seppacuercia','Vendedor','LucianoSeppacuercia@live.com','mail',6,6,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Gonzalo','Arregui','Jefe logistico','GonzaloArregui@live.com','mail',6,4,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Santiago','Gelves','Jefe Administrativo','SantiagoGelves@live.com','whatsapp',6,1,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Mariela','barrios','vendedora','Marielabarrios@live.com','whatsapp',6,3,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Constante','Moreno Preto','Ceo','ConstanteMoreno Preto@live.com','whatsapp',8,2,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Marina','Preto','Profesora','MarinaPreto@live.com','whatsapp',1,5,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Susana','Dawson','Ceramista','SusanaDawson@live.com','whatsapp',5,3,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Mariana ','Preto','Psicologa','Mariana Preto@live.com','whatsapp',1,2,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Mariano','Preto','Contador','MarianoPreto@live.com','whatsapp',3,1,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Steffano','grosso','Cobrador','Steffanogrosso@live.com','whatsapp',1,2,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Ricardo ','Martinoglio','Piloto','Ricardo Martinoglio@live.com','whatsapp',4,1,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Agustin','Mallman','Chef','AgustinMallman@live.com','telegram',2,6,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Michael','Jackson','Cantante','MichaelJackson@live.com','telegram',4,5,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Juan Pedro','Manaos','Director','Juan PedroManaos@live.com','whatsapp',6,5,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Agustin','Beccar Varela','CEO','AgustinBeccar Varela@live.com','whatsapp',6,2,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Marcos','Maqueda','Periodista','MarcosMaqueda@live.com','whatsapp',5,5,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Matias','Martin','Periodista','MatiasMartin@live.com','telegram',5,5,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('George','Michael','Cantante','GeorgeMichael@live.com','whatsapp',3,6,1,1);
+INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Jonas','Gutierrez','Futbolista','JonasGutierrez@live.com','whatsapp',2,5,1,1);
+
+
+
 INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('inaki', 'Igarreta', 'CFO','igarro@live.com','None',2,1,2,1);
 INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Mateo', 'Del Mastro', 'Sales Executive','el.macho@live.com','None',2,1,2,1);
 

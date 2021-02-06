@@ -15,7 +15,7 @@ const sequelize = require('../seq-conexion.js');
 router.get('/', validacionjwt, async (req, res) => {
 
     try {
-        const data = await sequelize.query('SELECT * FROM companies WHERE active = 1',
+        const data = await sequelize.query('SELECT companies.company_id,companies.company_name AS company,companies.company_address AS address, companies.mail, companies.phone, cities.city_name AS city, countries.country_name AS country, regions.region_name AS region FROM companies INNER JOIN cities ON companies.city_id = cities.city_id INNER JOIN countries ON cities.country_id = countries.country_id INNER JOIN regions ON countries.region_id = regions.region_id WHERE companies.active = 1',
             { type: sequelize.QueryTypes.SELECT })
         const response = {
             "request info": [
@@ -148,7 +148,7 @@ router.patch('/:company_id', validacionjwt, async (req, res) => {
     }
 })
 
-router.delete('/:company_id', validacionjwt, async (req, res) => {
+router.delete('/:company_id/delete', validacionjwt, async (req, res) => {
     const { eliminado } = req.query
     let eliminadoBool = JSON.parse(eliminado.toLowerCase());
     const { company_id } = req.params;

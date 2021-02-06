@@ -5,15 +5,15 @@ const sequelize = require('../seq-conexion.js');
 
 
 // CIUDADES
-// GET /ciudades – JWT OK 
+// GET /ciudades – JWT OK
 // POST /ciudades – JWT  OK
-// PATCH /ciudades /{ciudad_id} - JWT OK 
+// PATCH /ciudades /{ciudad_id} - JWT OK
 // DELETE /regiones /{ciudad_id} – JWT OK
 
 router.get('/', validacionjwt, async (req, res) => {
 
     try {
-        const data = await sequelize.query('SELECT * FROM cities WHERE active = 1',
+        const data = await sequelize.query('SELECT cities.city_name, countries.`country_name`, regions.`region_name` FROM cities INNER JOIN countries ON cities.country_id = countries.country_id INNER JOIN regions ON countries.region_id = regions.region_id WHERE cities.active = 1',
             { type: sequelize.QueryTypes.SELECT })
         const response = {
             "request info": [
