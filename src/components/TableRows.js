@@ -38,7 +38,7 @@ function TableRows({ where, data, displayEditContacts }) {
                 <td ><span className="grid-pais">{city} <label className='label-desc'>{regions}</label></span></td>
                 <td className='td-align'>{company}</td>
                 <td className='td-align'>{position}</td>
-                <td className='td-align porcentaje'><ProgressBar variant="success" label={`${interest}%`} now={interest} /></td>
+                <td className='td-align porcentaje'><ProgressBar variant="success" label={`${interest}`} now={interest} /></td>
                 {/* <td className='acciones'><BiDotsHorizontalRounded onClick={clickAcciones} /><Acciones displayAcciones={displayAcciones} /></td> */}
                 <td className='acciones'>{(displayActions) ? <span ><FaTrash className='icon-hover' onClick={() => deleteFromDB(contact_id, 'contacts')} /><GrEdit className='icon-hover' onClick={(e) => displayEditContacts({ contact_id: contact_id, name: name, surname: surname, mail: mail, city: city, regions: regions, company: company, position: position, interest: interest })} /></span> : <BiDotsHorizontalRounded />}</td>
             </tr>
