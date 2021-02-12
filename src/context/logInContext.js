@@ -83,6 +83,7 @@ const LogInProvider = ({ children }) => {
             .then(result => {
 
                 setInfoContacts(result.data)
+                console.log(result.data)
                 setPagination(result.PaginationInfo)
             })
             .catch(error => console.log('error', error));

@@ -15,7 +15,7 @@ const sequelize = require('../seq-conexion.js');
 
 // CREATE NEW USERS
 router.post('/newUser', validacionjwt, validacionAdmin, async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     const { name, surname, mail, pass, admin, phone } = req.body;
 
     if (!name || !surname || !mail || !pass || !toString(admin) || !phone) {
@@ -69,13 +69,13 @@ router.post('/newUser', validacionjwt, validacionAdmin, async (req, res) => {
 // BRING ALL USERS
 router.get('/', validacionjwt, validacionAdmin, async (req, res) => {
     const { mail } = req.query;
-    console.log(mail)
+    // console.log(mail)
     try {
         const data = await sequelize.query('SELECT user_id,name,surname, mail,admin, phone FROM users WHERE mail!=? AND active = 1', {
             replacements: [mail],
             type: sequelize.QueryTypes.SELECT
         })
-        console.log(data)
+        // console.log(data)
         const response = {
             "request info": [
                 {

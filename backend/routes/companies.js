@@ -72,8 +72,9 @@ router.post('/', validacionjwt, async (req, res) => {
     }
 })
 
-router.patch('/:company_id', validacionjwt, async (req, res) => {
-    const { company_name, company_address, mail, phone, city_id } = req.body;
+router.patch('/:company_id/modify', validacionjwt, async (req, res) => {
+    const { company_name, company_address, mail, phone, city } = req.body;
+    console.log(req.body)
     const { company_id } = req.params;
 
     try {
@@ -111,10 +112,15 @@ router.patch('/:company_id', validacionjwt, async (req, res) => {
                         type: sequelize.QueryTypes.UPDATE
                     })
             }
-            if (city_id) {
+
+            if (city) {
+                let city_id = await sequelize.query('SELECT city_id FROM cities WHERE city_name = ?', {
+                    replacements: [city],
+                    type: sequelize.QueryTypes.SELECT
+                })
                 await sequelize.query('UPDATE `companies` SET city_id = ? WHERE company_id = ?',
                     {
-                        replacements: [city_id, company_id],
+                        replacements: [city_id[0].city_id, company_id],
                         type: sequelize.QueryTypes.UPDATE
                     })
             }

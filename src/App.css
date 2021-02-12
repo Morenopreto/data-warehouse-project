@@ -31,6 +31,11 @@
   height: 40vmin;
   pointer-events: none;
 }
+h1{
+  color: #273152 !important;
+  font-weight: 300 !important;
+  font-size: 3rem !important;
+}
 .generic-button {
   min-width: 51px;
   padding: 10px 25px;

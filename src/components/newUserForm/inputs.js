@@ -1,11 +1,13 @@
 
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom';
 import { MdAirlineSeatLegroomReduced } from 'react-icons/md';
 import './inputs.css'
 
-function Inputs({ label, type, objectTag, prueba, data, moreInformation, defaultValue }) {
+function Inputs({ label, type, objectTag, getInfo, data, moreInformation, defaultValue }) {
     const [empty, setEmpty] = useState(true)
     const [classComplete, setClassComplete] = useState(false)
+    const location = useLocation();
     let LabelTag;
     let pattern;
     if (!empty) { LabelTag = <label>{label}</label> }
@@ -38,9 +40,6 @@ function Inputs({ label, type, objectTag, prueba, data, moreInformation, default
             let toDeselect = document.querySelectorAll('input[type=text]');
             if (!!toDeselect.length) {
                 for (let i = 0; i < toDeselect.length; i++) {
-                    // console.log('toDeselect[i].name')
-                    // console.log(toDeselect[i].name.includes(value))
-                    // console.log('toDeselect[i].name')
                     if (toDeselect[i].name.includes(value)) {
                         toDeselect[i].value = ''
                     }
@@ -54,7 +53,7 @@ function Inputs({ label, type, objectTag, prueba, data, moreInformation, default
         return (
             <div className='interactive-input-ctn'>
                 {LabelTag}
-                <input placeholder={label} type={type} defaultValue={(!!defaultValue) ? defaultValue : ''} onChange={(e) => showLabel(e)} onBlur={(e) => { prueba(objectTag, e.target.value) }} required ></input>
+                <input placeholder={label} type={type} defaultValue={(!!defaultValue) ? defaultValue : ''} onClick={(e)=>e.preventDefault()} onChange={(e) => {showLabel(e); getInfo(objectTag, e.target.value)}} onBlur={(e) => { getInfo(objectTag, e.target.value) }} required ></input>
             </div >
         )
     }
@@ -69,33 +68,36 @@ function Inputs({ label, type, objectTag, prueba, data, moreInformation, default
 
                         <li key={i} className='sq-select-li' >
 
-                            {(!item.includes('Agregar')) ? (
+                            {(!location.pathname.includes('modifyRegion')||!item.includes('Agregar')) ? (
                                 <>
                                     <input
+
                                         className='sq-select-input'
                                         defaultChecked={(item === defaultValue) ? true : false}
                                         id={`${item}-${i}`}
                                         name={`sq-select-${label}`}
                                         type='radio'
                                         value={item}
-                                        onClick={(e) => { prueba(objectTag, item); deselect(e, label) }} />
+                                        onClick={(e) => { getInfo(objectTag, item); deselect(e, label) }} />
                                     <label className='sq-select-label' for={`${item}-${i}`}>{item}</label>
                                 </>
                             ) : (
                                     <input
                                         className={`sq-select-label ${(classComplete) ? 'classComplete' : ''}`}
                                         // onChange={(e)=>(!!e.target.value)?e.target.classList.add = 'sq-select-input-complete':e.target.classList.remove = 'sq-select-input-complete'}
-                                        onClick={(e) => deselect(e, label)}
-                                        defaultValue=''
-                                        onBlur={(e) =>
-                                            (!!e.target.value) ? (
-                                                prueba(objectTag, e.target.value),
-                                                setClassComplete(true))
-                                                : setClassComplete(false)}
                                         id={`${item}-${i}`}
                                         name={`sq-select-${label}`}
                                         type='text'
                                         placeholder={`+ Agregar ${label}`}
+                                        autoComplete='off'
+                                        defaultValue={(location.pathname == '/regions' && defaultValue) ? defaultValue : ''}
+                                        onClick={(e) => deselect(e, label)}
+                                        onBlur={(e) =>
+                                            (!!e.target.value) ? (
+                                                getInfo(objectTag, e.target.value),
+                                                setClassComplete(true))
+                                                : setClassComplete(false)}
+
                                     />
                                 )
 

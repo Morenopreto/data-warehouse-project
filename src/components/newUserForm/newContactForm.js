@@ -38,7 +38,7 @@ function NewContactForm({ data,setModalStatus }) {
         setModalStatus(false)
     }
 
-    const prueba = (objectTag, value) => {
+    const getInfo = (objectTag, value) => {
         console.log(objectTag, value)
         if (objectTag === 'name') setNewContactInfo({ ...newContactInfo, name: value })
         if (objectTag === 'surname') setNewContactInfo({ ...newContactInfo, surname: value })
@@ -55,9 +55,9 @@ function NewContactForm({ data,setModalStatus }) {
         <section className={`form-section ${(data) ? 'form-section-modal' : null}`}>
             <Form className={`form-ctn ${(data) ? 'form-ctn-modal' : null} `} onSubmit={(e) => (!data) ? submitNewContact(e) : submitContactModified(e, data.contact_id)}>
                 <h5>Informacion Personal</h5>
-                <Inputs label='Nombre' objectTag='name' type='text' defaultValue={data?.name} prueba={prueba} />
-                <Inputs label='Apellido' objectTag='surname' type='text' defaultValue={data?.surname} prueba={prueba} />
-                <Inputs label='Mail' objectTag='mail' type='mail' defaultValue={data?.mail} prueba={prueba} />
+                <Inputs label='Nombre' objectTag='name' type='text' defaultValue={data?.name} getInfo={getInfo} />
+                <Inputs label='Apellido' objectTag='surname' type='text' defaultValue={data?.surname} getInfo={getInfo} />
+                <Inputs label='Mail' objectTag='mail' type='mail' defaultValue={data?.mail} getInfo={getInfo} />
                 <Inputs
                     label='Ciudad'
                     objectTag='city_name'
@@ -65,13 +65,13 @@ function NewContactForm({ data,setModalStatus }) {
                     defaultValue={data?.city}
                     data={Array.from(infoCountries.map(item => item.city_name))}
                     moreInformation='Si la ciudad no se encuentra, debe agregarla desde la seccion Regiones/Ciudades.'
-                    prueba={prueba}
+                    getInfo={getInfo}
                 />
 
 
                 <h5>Informacion de la compañia</h5>
-                <Inputs label='Posicion en la compañia' objectTag='position' type='text' defaultValue={data?.position} prueba={prueba} />
-                {/* <Inputs label='Compañia' objectTag='company' type='text' prueba={prueba} /> */}
+                <Inputs label='Posicion en la compañia' objectTag='position' type='text' defaultValue={data?.position} getInfo={getInfo} />
+                {/* <Inputs label='Compañia' objectTag='company' type='text' getInfo={getInfo} /> */}
                 <Inputs label='Compañia'
                     objectTag='company_name'
                     type='sq-select'
@@ -80,7 +80,7 @@ function NewContactForm({ data,setModalStatus }) {
                     data={['Plus Cargo', 'Del Beagle', 'Frodas', 'Chandon', 'El purgatorio bar', 'Aerolab', 'AWE Systems', 'Los Yamanas']}
                     moreInformation='Si la ciudad no se encuentra, debe agregarla desde la seccion compañias.'
 
-                    prueba={prueba} />
+                    getInfo={getInfo} />
                 <h5>Informacion Extra</h5>
                 <Inputs label='Porcentaje de Interes'
                     objectTag='interest'
@@ -89,7 +89,7 @@ function NewContactForm({ data,setModalStatus }) {
                     data={['0%', '25%', '50%', '75%', '100%']}
                     moreInformation='Seleccione el porcentaje de interes del contacto en las propuestas que usted le ofrece.'
 
-                    prueba={prueba} />
+                    getInfo={getInfo} />
 
 
                 {(!data) ?

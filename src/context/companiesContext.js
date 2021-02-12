@@ -73,9 +73,10 @@ const CompaniesProvider = ({ children }) => {
             .then(response => response.json())
             .then(result => {
                 console.log(result)
+                getAllCompanies()
                 // GetUserData(tokenState, 1)
             })
-            .catch(error => console.log('error', error));
+            .catch(error => console.log(error));
     }
     const deleteCompanyFromDB = (id) => {
 

@@ -135,6 +135,7 @@ const UserTableProvider = ({ children }) => {
                 hiddenSearch: hiddenSearch,
                 //METHODS
                 addItemToSearch: addItemToSearch,
+                GetCountryData:GetCountryData,
                 hiddenSearchModify: hiddenSearchModify,
                 setSearchParameter: setSearchParameter,
                 deletePill: deletePill,

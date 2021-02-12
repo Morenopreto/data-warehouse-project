@@ -14,8 +14,8 @@ let src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIQEBIQEB
 
 function TableRows({ where, data, displayEditContacts }) {
     const [displayActions, setDisplayActions] = useState(false);
-    const { modifyPermissions, deleteFromDB } = useContext(UserFormContext);
-    const {deleteCompanyFromDB } = useContext(CompaniesContext);
+    const { modifyUser, deleteFromDB } = useContext(UserFormContext);
+    const { deleteCompanyFromDB } = useContext(CompaniesContext);
 
     // const submitDelete = (id,where) => {
     //     console.log('intenta eliminar '+ id +' desde '+ where)
@@ -26,7 +26,7 @@ function TableRows({ where, data, displayEditContacts }) {
         setDisplayActions(bool)
     }
     if (where === '/contacts') {
-        const { contact_id,city, company, interest, mail, name, position, regions, surname} = data;
+        const { contact_id, city, company, interest, mail, name, position, regions, surname } = data;
 
         // const labelOrInput = (changeLabelToInputs) ? <label>{`${name} ${surname}`}</label> : <input type='text' defaultValue={`${name} ${surname}`}></input>;
 
@@ -40,7 +40,7 @@ function TableRows({ where, data, displayEditContacts }) {
                 <td className='td-align'>{position}</td>
                 <td className='td-align porcentaje'><ProgressBar variant="success" label={`${interest}%`} now={interest} /></td>
                 {/* <td className='acciones'><BiDotsHorizontalRounded onClick={clickAcciones} /><Acciones displayAcciones={displayAcciones} /></td> */}
-                <td className='acciones'>{(displayActions) ? <span ><FaTrash onClick={()=>deleteFromDB(contact_id,'contacts')} /><GrEdit onClick={(e) => displayEditContacts({contact_id:contact_id,name:name,surname:surname,mail:mail,city:city,regions:regions,company:company,position:position,interest:interest})} /></span> : <BiDotsHorizontalRounded />}</td>
+                <td className='acciones'>{(displayActions) ? <span ><FaTrash className='icon-hover' onClick={() => deleteFromDB(contact_id, 'contacts')} /><GrEdit className='icon-hover' onClick={(e) => displayEditContacts({ contact_id: contact_id, name: name, surname: surname, mail: mail, city: city, regions: regions, company: company, position: position, interest: interest })} /></span> : <BiDotsHorizontalRounded />}</td>
             </tr>
 
         )
@@ -59,10 +59,10 @@ function TableRows({ where, data, displayEditContacts }) {
                         name='admin'
                         defaultChecked={admin}
                         label="Permisos de Administrador"
-                        onChange={(e) => modifyPermissions(user_id, { admin: `${Number(e.target.checked)}` })}
+                        onChange={(e) => modifyUser(user_id, { admin: `${Number(e.target.checked)}` })}
                     />
                 </td>
-                <td className='acciones'>{(displayActions) ? <span ><FaTrash onClick={()=>deleteFromDB(user_id,'users')} /><GrEdit onClick={(e) => console.log('ver como se hizo en contacts') } /></span> : <BiDotsHorizontalRounded />}</td>
+                <td className='acciones'>{(displayActions) ? <span ><FaTrash className='icon-hover' onClick={() => deleteFromDB(user_id, 'users')} /><GrEdit className='icon-hover' onClick={(e) => displayEditContacts({user_id:user_id, name: name, surname: surname, mail: mail, admin: admin, phone: phone })} /></span> : <BiDotsHorizontalRounded />}</td>
             </tr>
         )
     } else if (where === '/companies') {
@@ -75,7 +75,7 @@ function TableRows({ where, data, displayEditContacts }) {
                 {/* <td className='td-align'>{company}</td> */}
                 <td className='td-align'>{address}</td>
                 <td className='td-align'>{phone}</td>
-                <td className='acciones'>{(displayActions) ? <span ><FaTrash onClick={()=>deleteCompanyFromDB(company_id)} /><GrEdit onClick={(e) => console.log('ver como se hizo en contacts') } /></span> : <BiDotsHorizontalRounded />}</td>
+                <td className='acciones'>{(displayActions) ? <span ><FaTrash className='icon-hover' onClick={() => deleteCompanyFromDB(company_id)} /><GrEdit className='icon-hover' onClick={(e) => displayEditContacts({ company_id: company_id, company: company, address: address, mail: mail, phone: phone, city: city, region: region })} /></span> : <BiDotsHorizontalRounded />}</td>
 
             </tr>
         )

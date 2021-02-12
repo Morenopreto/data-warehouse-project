@@ -8,14 +8,9 @@ import { UserTableContext } from '../context/userTableContext'
 import { LogInContext } from '../context/logInContext';
 import Inputs from './newUserForm/inputs';
 
-function AddRegions({ data, setModalStatus }) {
+function AddRegions({ data }) {
 
 
-    const [status, setStatus] = useState(true);
-    //Unable the  input for adding a new data (region, country or city)
-    // const [showAddRegBtn, setShowAddRegBtn] = useState(false);
-    // const [showAddCounBtn, setShowAddCounBtn] = useState(false);
-    // const [showAddCityBtn, setShowAddCityBtn] = useState(false);
 
     // unable the section when the section above is complete
     const [showCountrySect, setShowCountrySect] = useState(false);
@@ -28,24 +23,15 @@ function AddRegions({ data, setModalStatus }) {
 
 
     const [newRegionInfo, setNewRegionInfo] = useState({});
-    const { addContact, modifyContact } = useContext(UserFormContext);
+    const { addContact, modifyContact } = useContext(UserFormContext); // esto no va, cambiar por uno de regiones
     const { infoCountries } = useContext(UserTableContext);
-    // console.log(infoCountries)
-    // let disabled = true;
-    // useEffect(() => {
-    //     (newContactInfo.length)?disabled=false:disabled=true;
-    // }, [newContactInfo])
+    useEffect(() => {
+        setNewRegionInfo({})
+        console.log(newRegionInfo)
+    }, [])
 
 
-    const handleActive = () => {
-
-        //chequear que funcion de manera correcta!!!!
-
-        if (Array.from(document.getElementsByTagName('input')).map(item => !!item.value).find(item => item === false) === undefined
-            // && document.querySelectorAll("input[type=password]")[0].value !== document.querySelectorAll("input[type=password]")[1].value
-        ) { setStatus(false); console.log('viene a if') } else { setStatus(true); console.log('viene a else') };
-    }
-    const submitNewContact = (e) => {
+    const submitNewRegionInfo = (e) => {
         e.preventDefault();
         addContact(newRegionInfo);
     }
@@ -53,48 +39,38 @@ function AddRegions({ data, setModalStatus }) {
         e.preventDefault();
         // console.log(id, newRegionInfo);
         modifyContact(id, newRegionInfo);
-        setModalStatus(false)
     }
 
-    const prueba = (objectTag, value) => {
-        console.log(objectTag, value)
+    const getInfo = (objectTag, value) => {
+        console.log(newRegionInfo)
         if (objectTag === 'region') {
-
-            // console.log('showCountrySect');
             setNewRegionInfo({ ...newRegionInfo, region: value });
-            setShowCountrySect(true)
-
             setCountryData([...new Set(infoCountries.filter(a => a.region_name == value).map(x => x.country_name)), '+ Agregar Pais'])
+            setShowCountrySect(true)
             setShowCitySect(false)
 
         }
         if (objectTag === 'country') {
             setNewRegionInfo({ ...newRegionInfo, country: value })
             setShowCitySect(true)
-            setCityData([...infoCountries.filter(a => a.country_name == value).map(x => x.city_name), '+ Agregar Ciudad'])
+            // setCityData([...infoCountries.filter(a => a.country_name == value).map(x => x.city_name), '+ Agregar Ciudad'])
 
         }
-        if (objectTag === 'city') setNewRegionInfo({ ...newRegionInfo, city: value })
+        if (objectTag === 'city') {setNewRegionInfo({ ...newRegionInfo, city: value })
+    console.log(value )}
     }
 
     return (
 
-        <section className={`form-section ${(data) ? 'form-section-modal' : null}`}>
-            <Form className={`form-ctn ${(data) ? 'form-ctn-modal' : null} `} onSubmit={(e) => (!data) ? submitNewContact(e) : submitContactModified(e, data.contact_id)}>
-                <p>la logica deberia ser, cuando seleccionas uno de los existentes o agregas uno nuevo, habilita la proxima seccion. la logica de agregar tiene que ser la misma que la del anterior agregando el input </p>
+        <section className='form-section'>
+            <Form className='form-ctn' onSubmit={(e) => (!data) ? submitNewRegionInfo(e) : submitContactModified(e, data.contact_id)}>
                 <Inputs
                     label='Region'
                     objectTag='region'
                     type='sq-select'
-                    // defaultValue={data?.city}
                     data={[...new Set(infoCountries.map(x => x.region_name)), '+ Agregar region']}
-                    prueba={prueba}
+                    getInfo={getInfo}
                 />
-
-                {/* <button className='addButton' type="button" onClick={() => setShowAddRegBtn(!showAddRegBtn)} >{(!showAddRegBtn) ? '+ Agregar Region' : '- Cerrar Input'}</button>
-                <span className={`${(showAddRegBtn) ? 'showAddInput' : 'hideAddInput'}`}>
-                    <Inputs label='Region' objectTag='region' type='text' prueba={prueba} />
-                </span> */}
 
                 <fieldset className={`${(showCountrySect) ? 'show' : 'hideAddInput'}`}>
                     {/* <h5>Pais</h5> */}
@@ -104,13 +80,7 @@ function AddRegions({ data, setModalStatus }) {
                         // defaultValue={data?.company}
                         //despues cambiar la data de este input por un map!
                         data={countryData}
-                        prueba={prueba} />
-                   
-                   
-                    {/* <button className='addButton' type="button" onClick={() => setShowAddCounBtn(!showAddCounBtn)} >{(!showAddCounBtn) ? '+ Agregar Pais' : '- Cerrar Input'}</button>
-                    <span className={`${(showAddCounBtn) ? 'showAddInput' : 'hideAddInput'}`}>
-                        <Inputs label='Pais' objectTag='country' type='text' prueba={prueba} />
-                    </span> */}
+                        getInfo={getInfo} />
 
                 </fieldset>
 
@@ -120,21 +90,22 @@ function AddRegions({ data, setModalStatus }) {
                     <Inputs label='Ciudad'
                         objectTag='city'
                         type='sq-select'
-                        defaultValue={data?.interest}
-                        data={cityData}
-                        moreInformation='Por ahora nada rey.'
+                        data={['+ Agregar Ciudad']}
+                        moreInformation={`Ciudades de ${newRegionInfo?.country} ya agregadas: ${infoCountries.filter(a => a.country_name == newRegionInfo?.country ).map(x => ' '+x.city_name )}`}
 
-                        prueba={prueba} />
-                    {/* <button className='addButton' type="button" onClick={() => setShowAddCityBtn(!showAddCityBtn)} >{(!showAddCityBtn) ? '+ Agregar ciudad' : '- Cerrar Input'}</button>
-                    <span className={`${(showAddCityBtn) ? 'showAddInput' : 'hideAddInput'}`}>
-                        <Inputs label='Ciudad' objectTag='city' type='text' prueba={prueba} />
-                    </span> */}
+                        getInfo={getInfo} />
+
                 </fieldset>
-
+                {(newRegionInfo.region)?<h6>Informacion a agregar</h6>:''}
+                <p>{`
+                ${(newRegionInfo.region) ? newRegionInfo.region : ''}
+                ${(newRegionInfo.country) ? ' - ' + newRegionInfo.country : ''}
+                ${(newRegionInfo.city) ? ' - ' + newRegionInfo.city : ''}`
+                }</p>
 
                 {(!data) ?
-                    <button className='generic-button align-right'>
-                        Sumbit
+                    <button className='generic-button align-right' disabled={!newRegionInfo.city}>
+                        Agregar
                 </button> :
                     <button className='generic-button align-right-modal' type='submit' disabled={!!newRegionInfo[0]}>
                         Guardar Cambios

@@ -7,7 +7,7 @@ import { UserTableContext } from '../context/userTableContext'
 import { MdArrowDropDown, MdFileUpload, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { GrFormClose } from 'react-icons/gr';
 import SearchForm from './table/searchForm';
-import EditContactModal from './editContactModal'
+import EditModal from './editModal'
 import TableComp from './table';
 import './css/table.css';
 
@@ -32,10 +32,10 @@ function ContactsComp() {
     }
 
 
-    // if (pagination.Page > 1) { paginationArrowLeft = <MdKeyboardArrowLeft onClick={() => { GetUserData(tokenState, (pagination.Page - 1) * 9) }} /> }
-    //     if (pagination.Page != pagination.PageCount) { paginationArrowRight = <MdKeyboardArrowRight onClick={() => GetUserData(tokenState, pagination.Page * 10 + 1)} /> }
+    if (pagination.Page > 1) { paginationArrowLeft = <MdKeyboardArrowLeft onClick={() => { GetUserData(tokenState, (pagination.Page - 1) * 9) }} /> }
+        if (pagination.Page != pagination.PageCount) { paginationArrowRight = <MdKeyboardArrowRight onClick={() => GetUserData(tokenState, pagination.Page * 10 + 1)} /> }
     return (
-        <div className='c'>
+        <div className='contacts-view-div'>
             <h1>Contactos</h1>
 
 
@@ -46,7 +46,7 @@ function ContactsComp() {
                     <div id='div-input-search' className='div-input-search'>
                         <input type='text' id='input-search' className='input-search' onKeyDown={(e) => { addItemToSearch(e); }} onClick={(e) => { if (!hiddenSearch) hiddenSearchModify(e) }} />
                         {/* <i class="fas fa-caret-down" onClick={(e) => hiddenSearchModify(e)}></i> */}
-                        <MdArrowDropDown onClick={(e) => hiddenSearchModify(e)} />
+                        <MdArrowDropDown className='cursor' onClick={(e) => hiddenSearchModify(e)} />
                     </div>
                 </div>
                 <div className='search-bar-buttons-ctn'>
@@ -67,12 +67,12 @@ function ContactsComp() {
             {/* HASTA ACA */}
             <SearchForm hiddenSearch={hiddenSearch} infoContactsSort={infoContactsSort} />
             <TableComp info={infoContacts} displayEditContacts={displayEditContacts} />
-            {/*  <div>
+             <div className='pagination'>
                 <label> {pagination.Page} - {pagination.PageCount} Pags. </label>
                 <span>{paginationArrowLeft}</span>
                 <span>{paginationArrowRight}</span>
-            </div>*/}
-            <EditContactModal modalStatus={modalStatus} setModalStatus={setModalStatus} modalData={modalData} />
+            </div>
+            <EditModal modalStatus={modalStatus} setModalStatus={setModalStatus} modalData={modalData} />
         </div>
     )
 }

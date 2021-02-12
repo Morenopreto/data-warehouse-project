@@ -37,7 +37,7 @@ function validacionjwt(req, res, next) {
 
     const tokeen = req.headers.authorization.split(' ')[1];
     const verificarToken = jwt.verify(tokeen, tokenKey);
-    console.log(verificarToken)
+    // console.log(verificarToken)
     try {
         const token = req.headers.authorization.split(' ')[1];
 
@@ -87,7 +87,7 @@ function validacionjwt(req, res, next) {
 }
 
 function validacionAdmin(req, res, next) {
-    console.log('valido admin')
+    // console.log('valido admin')
     if (req.infoToken == undefined) {
         let response = {
             'code': 400,

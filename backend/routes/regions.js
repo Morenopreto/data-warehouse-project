@@ -4,9 +4,9 @@ const { validacionjwt, response500 } = require('../middelwares/middelwares')
 const sequelize = require('../seq-conexion.js');
 
 // REGIONES
-// GET /regiones – JWT OK 
+// GET /regiones – JWT OK
 // POST / regiones – JWT  OK
-// PATCH / regiones /{region_id} - JWT OK 
+// PATCH / regiones /{region_id} - JWT OK
 // DELETE / regiones /{region_id} – JWT  OK
 
 
@@ -35,7 +35,7 @@ router.get('/', validacionjwt, async (req, res) => {
 
 })
 
-router.post('/', validacionjwt, async (req, res) => {
+router.post('/newRegion', validacionjwt, async (req, res) => {
 
     const { region_name } = req.body;
 
@@ -72,17 +72,17 @@ router.post('/', validacionjwt, async (req, res) => {
     }
 })
 
-router.patch('/:region_id', validacionjwt, async (req, res) => {
+router.patch('/:region_id/modify', validacionjwt, async (req, res) => {
     const { region_name } = req.body;
     const { region_id } = req.params;
 
     try {
-        let companyCheck = await sequelize.query('SELECT * FROM regions WHERE region_id = ?',
+        let regionCheck = await sequelize.query('SELECT * FROM regions WHERE region_id = ?',
             {
                 replacements: [region_id],
                 type: sequelize.QueryTypes.SELECT
             })
-        if (!!companyCheck.length) {
+        if (!!regionCheck.length) {
             if (region_name) {
                 await sequelize.query('UPDATE `regions` SET region_name = ? WHERE region_id = ?',
                     {
@@ -119,7 +119,7 @@ router.patch('/:region_id', validacionjwt, async (req, res) => {
     }
 })
 
-router.delete('/:region_id', validacionjwt, async (req, res) => {
+router.delete('/:region_id/delete', validacionjwt, async (req, res) => {
     const { eliminado } = req.query
     let eliminadoBool = JSON.parse(eliminado.toLowerCase());
     const { region_id } = req.params;

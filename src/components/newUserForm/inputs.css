@@ -6,7 +6,8 @@
   border-radius: 0.4em;
   box-shadow: inset 1px 1px 4px #f2f3f7;
   padding: 1em;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
+  /* margin-bottom: 1rem; */
   position: relative;
   display: flex;
   flex-flow: column wrap;
@@ -27,10 +28,8 @@
 .interactive-input-ctn:focus-within {
   color: #495057;
   background-color: #fff;
-  /* border-color: #80bdff; */
   border-color: rgba(90, 217, 172, 1);
   outline: 0;
-  /* box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); */
   box-shadow: 0 0 0 0.2rem rgba(90, 217, 172, 0.25);
 }
 .sq-select-input {

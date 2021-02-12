@@ -36,14 +36,14 @@ router.get('/', validacionjwt, async (req, res) => {
 
 router.post('/', validacionjwt, async (req, res) => {
 
-    const { country_name, region_id } = req.body;
+    const { country_name, region_name } = req.body;
 
-    if (!country_name || !region_id) {
+    if (!country_name || !region_name) {
         const response = {
             "request info": [
                 {
                     'code': 400,
-                    'description': 'country_name and region_id cant be undefined',
+                    'description': 'country_name and region_name cant be undefined',
                     'date': new Date()
                 }
             ]
@@ -51,12 +51,13 @@ router.post('/', validacionjwt, async (req, res) => {
         res.status(400).json(response);
     } else {
         try {
-            const regionCheck = await sequelize.query('SELECT * FROM regions WHERE active = 1', {
+            const regionCheck = await sequelize.query('SELECT * FROM regions WHERE active = 1 AND region_name = ?', {
+                replacements: [region_name],
                 type: sequelize.QueryTypes.SELECT
             })
             if (!!regionCheck.length) {
-                await sequelize.query('INSERT INTO countries (country_name,region_id, active) VALUES (?,?)', {
-                    replacements: [country_name, region_id, 0],
+                await sequelize.query('INSERT INTO countries (country_name,region_id, active) VALUES (?,?,?)', {
+                    replacements: [country_name, regionCheck[0].region_id, 0],
                     type: sequelize.QueryTypes.INSERT
                 })
                 const response = {
@@ -74,7 +75,7 @@ router.post('/', validacionjwt, async (req, res) => {
                     "request info": [
                         {
                             'code': 400,
-                            'description': `Region_id does not exist or is inactive`,
+                            'description': `Region_name does not exist or is inactive`,
                             'date': new Date()
                         }
                     ]
@@ -88,14 +89,16 @@ router.post('/', validacionjwt, async (req, res) => {
     }
 })
 
-router.patch('/:country_id', validacionjwt, async (req, res) => {
-    const { country_name, region_id } = req.body;
+router.patch('/:country_id/modify', validacionjwt, async (req, res) => {
+    const { country_name, parent_id } = req.body;
     const { country_id } = req.params;
+    console.log('country_name')
+    console.log(country_name)
     let regionCheck;
     try {
-        if (region_id) {
+        if (parent_id) {
             regionCheck = await sequelize.query('SELECT * FROM regions WHERE active = 1 AND region_id = ?', {
-                replacements: [region_id],
+                replacements: [parent_id],
                 type: sequelize.QueryTypes.SELECT
             })
 
@@ -105,6 +108,10 @@ router.patch('/:country_id', validacionjwt, async (req, res) => {
                 replacements: [country_id],
                 type: sequelize.QueryTypes.SELECT
             })
+        console.log("countryCheck")
+        console.log(countryCheck)
+        console.log('countryCheck.length')
+        console.log(countryCheck.length)
         if (!!countryCheck.length) {
             if (country_name) {
                 await sequelize.query('UPDATE `countries` SET country_name = ? WHERE country_id = ?',
@@ -113,27 +120,6 @@ router.patch('/:country_id', validacionjwt, async (req, res) => {
                         type: sequelize.QueryTypes.UPDATE
                     })
             }
-            if (!!regionCheck.length) {
-                if (region_id) {
-                    await sequelize.query('UPDATE `countries` SET region_id = ? WHERE country_id = ?',
-                        {
-                            replacements: [region_id, country_id],
-                            type: sequelize.QueryTypes.UPDATE
-                        })
-                }
-            } else {
-                const response = {
-                    "request info": [
-                        {
-                            'code': 400,
-                            'description': `region_id ${region_id} does not exist or is inactive`,
-                            'date': new Date()
-                        }
-                    ]
-                }
-                res.status(400).json(response)
-            }
-
             const response = {
                 "request info": [
                     {
@@ -163,7 +149,7 @@ router.patch('/:country_id', validacionjwt, async (req, res) => {
     }
 })
 
-router.delete('/:country_id', validacionjwt, async (req, res) => {
+router.delete('/:country_id/delete', validacionjwt, async (req, res) => {
     const { eliminado } = req.query
     let eliminadoBool = JSON.parse(eliminado.toLowerCase());
     const { country_id } = req.params;

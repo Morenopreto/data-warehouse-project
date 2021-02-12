@@ -1,21 +1,23 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { LogInContext } from './logInContext'
+import { UserTableContext } from './userTableContext';
 
 
 
-export const UserFormContext = createContext();
+export const RegionsContext = createContext();
 
 
-const UserFormProvider = ({ children }) => {
-    const { tokenState, userMail, GetUserData } = useContext(LogInContext);
-    const [allUser, setAllUsers] = useState([]);
+const RegionsProvider = ({ children }) => {
+    const { tokenState } = useContext(LogInContext);
+    const { GetCountryData } = useContext(UserTableContext);
+    const [allRegions, setAllRegions] = useState([]);
     const [fetchStatus, setFetchStatus] = useState(null)
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", `Bearer ${tokenState}`);
 
 
-    const addUser = (data) => {
+    const addRegions = (data) => {
         setFetchStatus('fetching');
         var raw = JSON.stringify(data);
         // myHeaders.append("Authorization", `Bearer ${tokenState}`);
@@ -26,7 +28,7 @@ const UserFormProvider = ({ children }) => {
             redirect: 'follow'
         };
 
-        fetch(`http://localhost:9000/users/newUser`, requestOptions)
+        fetch(`http://localhost:9000/regions/newRegion`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 (!result.requestInfo[0]['error']) ?
@@ -41,63 +43,27 @@ const UserFormProvider = ({ children }) => {
             .finally(() => { setTimeout(() => { setFetchStatus(null) }, 1500) })
 
     }
-
-    const getAllUsers = () => {
+    // pueded que no vaya porque esta GetCountryData desde usertable context.
+    const getAllRegions = () => {
 
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         };
-        fetch(`http://localhost:9000/users?mail=${userMail}`, requestOptions)
+        fetch(`http://localhost:9000/companies`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                if (!!result.data[0]?.user_id) {
-                    setAllUsers(result.data)
-                }
+                setAllRegions(result.data)
                 console.log(result.data)
             })
             .catch(error => console.log('error', error));
     }
-    const modifyUser = (id, changes) => {
 
-        let raw = JSON.stringify(changes)
-        var requestOptions = {
-            method: 'PATCH',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-        console.log(raw)
-        fetch(`http://localhost:9000/users/${id}`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                getAllUsers()
-                console.log(result)
-            })
-            .catch(error => console.log('error', error));
-    }
-    ///////CONTACTOS
-    const addContact = (data) => {
-        var raw = JSON.stringify(data);
-        console.log(raw)
-        // myHeaders.append("Authorization", `Bearer ${tokenState}`);
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch(`http://localhost:9000/contacts/newContact`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result)
-            })
-            .catch(error => console.log('error', error));
-    }
-    const modifyContact = (id, changes) => {
-
+    const modifyRegions = (id, where, changes) => {
+        console.log('changes')
+        console.log(changes)
+        console.log('changes')
         let raw = JSON.stringify(changes)
         var requestOptions = {
             method: 'PATCH',
@@ -106,15 +72,16 @@ const UserFormProvider = ({ children }) => {
             redirect: 'follow'
         };
 
-        fetch(`http://localhost:9000/contacts/${id}/modify`, requestOptions)
+        fetch(`http://localhost:9000/${where}/${id}/modify`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result)
-                GetUserData(tokenState, 1)
+                GetCountryData()
+                // GetUserData(tokenState, 1)
             })
             .catch(error => console.log('error', error));
     }
-    const deleteFromDB = (id,where) => {
+    const deleteFromDB = (id, where) => {
 
         var requestOptions = {
             method: 'DELETE',
@@ -125,32 +92,30 @@ const UserFormProvider = ({ children }) => {
             .then(response => response.json())
             .then(result => {
                 console.log(result)
-                if(where==='contacts'){
-                    GetUserData(tokenState, 1)
-                }else if(where==='users'){
-                    getAllUsers()
-                }
+                GetCountryData()
+                // getAllRegions(tokenState, 1)
+
             })
             .catch(error => console.log('error', error));
     }
 
+
     return (
-        <UserFormContext.Provider
+        <RegionsContext.Provider
             value={{
                 fetchStatus: fetchStatus,
-                allUser: allUser,
-                addUser: addUser,
-                getAllUsers: getAllUsers,
-                modifyUser: modifyUser,
-                addContact: addContact,
-                modifyContact: modifyContact,
+                allRegions: allRegions,
+                addRegions: addRegions,
+                modifyRegions: modifyRegions,
+                getAllRegions: getAllRegions,
                 deleteFromDB: deleteFromDB
+
             }}
         >
             {children}
-        </UserFormContext.Provider>
+        </RegionsContext.Provider>
     );
 }
-export default UserFormProvider;
+export default RegionsProvider;
 
 

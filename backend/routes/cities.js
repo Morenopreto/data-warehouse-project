@@ -13,7 +13,7 @@ const sequelize = require('../seq-conexion.js');
 router.get('/', validacionjwt, async (req, res) => {
 
     try {
-        const data = await sequelize.query('SELECT cities.city_name, countries.`country_name`, regions.`region_name` FROM cities INNER JOIN countries ON cities.country_id = countries.country_id INNER JOIN regions ON countries.region_id = regions.region_id WHERE cities.active = 1',
+        const data = await sequelize.query('SELECT cities.city_name,cities.city_id, countries.`country_name`,countries.`country_id`, regions.`region_name`,regions.`region_id` FROM cities INNER JOIN countries ON cities.country_id = countries.country_id INNER JOIN regions ON countries.region_id = regions.region_id WHERE cities.active = 1 AND countries.active = 1 AND regions.active = 1',
             { type: sequelize.QueryTypes.SELECT })
         const response = {
             "request info": [
@@ -36,14 +36,14 @@ router.get('/', validacionjwt, async (req, res) => {
 
 router.post('/', validacionjwt, async (req, res) => {
 
-    const { city_name, country_id } = req.body;
+    const { city_name, country_name } = req.body;
 
-    if (!city_name || !country_id) {
+    if (!city_name || !country_name) {
         const response = {
             "request info": [
                 {
                     'code': 400,
-                    'description': 'city_name and country_id cant be undefined',
+                    'description': 'city_name and country_name cant be undefined',
                     'date': new Date()
                 }
             ]
@@ -51,12 +51,13 @@ router.post('/', validacionjwt, async (req, res) => {
         res.status(400).json(response);
     } else {
         try {
-            const countryCheck = await sequelize.query('SELECT * FROM countries WHERE active = 1', {
+            const countryCheck = await sequelize.query('SELECT * FROM countries WHERE active = 1 AND country_name = ?', {
+                replacements: [country_name],
                 type: sequelize.QueryTypes.SELECT
             })
             if (!!countryCheck.length) {
-                await sequelize.query('INSERT INTO cities (city_name,country_id, active) VALUES (?,?)', {
-                    replacements: [city_name, country_id, 0],
+                await sequelize.query('INSERT INTO cities (city_name,country_id, active) VALUES (?,?,?)', {
+                    replacements: [city_name, countryCheck[0].country_id, 0],
                     type: sequelize.QueryTypes.INSERT
                 })
                 const response = {
@@ -74,7 +75,7 @@ router.post('/', validacionjwt, async (req, res) => {
                     "request info": [
                         {
                             'code': 400,
-                            'description': `country_id does not exist or is inactive`,
+                            'description': `country_name does not exist or is inactive`,
                             'date': new Date()
                         }
                     ]
@@ -88,14 +89,14 @@ router.post('/', validacionjwt, async (req, res) => {
     }
 })
 
-router.patch('/:city_id', validacionjwt, async (req, res) => {
-    const { city_name, country_id } = req.body;
+router.patch('/:city_id/modify', validacionjwt, async (req, res) => {
+    const { city_name, parent_id } = req.body;
     const { city_id } = req.params;
     let countryCheck;
     try {
-        if (country_id) {
+        if (parent_id) {
             countryCheck = await sequelize.query('SELECT * FROM countries WHERE active = 1 AND country_id = ? ', {
-                replacements: [country_id],
+                replacements: [parent_id],
                 type: sequelize.QueryTypes.SELECT
             })
 
@@ -113,26 +114,26 @@ router.patch('/:city_id', validacionjwt, async (req, res) => {
                         type: sequelize.QueryTypes.UPDATE
                     })
             }
-            if (!!countryCheck.length) {
-                if (country_id) {
-                    await sequelize.query('UPDATE `cities` SET country_id = ? WHERE city_id = ?',
-                        {
-                            replacements: [country_id, city_id],
-                            type: sequelize.QueryTypes.UPDATE
-                        })
-                }
-            } else {
-                const response = {
-                    "request info": [
-                        {
-                            'code': 400,
-                            'description': `country_id ${country_id} does not exist or is inactive`,
-                            'date': new Date()
-                        }
-                    ]
-                }
-                res.status(400).json(response)
-            }
+            // if (!!countryCheck.length) {
+            //     if (parent_id) {
+            //         await sequelize.query('UPDATE `cities` SET country_id = ? WHERE city_id = ?',
+            //             {
+            //                 replacements: [parent_id, city_id],
+            //                 type: sequelize.QueryTypes.UPDATE
+            //             })
+            //     }
+            // } else {
+            //     const response = {
+            //         "request info": [
+            //             {
+            //                 'code': 400,
+            //                 'description': `country_id ${parent_id} does not exist or is inactive`,
+            //                 'date': new Date()
+            //             }
+            //         ]
+            //     }
+            //     res.status(400).json(response)
+            // }
 
             const response = {
                 "request info": [
@@ -150,7 +151,7 @@ router.patch('/:city_id', validacionjwt, async (req, res) => {
                 "request info": [
                     {
                         'code': 400,
-                        'description': `country_id ${country_id} does not exist`,
+                        'description': `country_id ${parent_id} does not exist`,
                         'date': new Date()
                     }
                 ]
@@ -163,7 +164,7 @@ router.patch('/:city_id', validacionjwt, async (req, res) => {
     }
 })
 
-router.delete('/:city_id', validacionjwt, async (req, res) => {
+router.delete('/:city_id/delete', validacionjwt, async (req, res) => {
     const { eliminado } = req.query
     let eliminadoBool = JSON.parse(eliminado.toLowerCase());
     const { city_id } = req.params;
