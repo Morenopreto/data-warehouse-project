@@ -1,70 +1,134 @@
-# Getting Started with Create React App
+DATA_WAREHOUSE
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### .Creado por: MORENO PRETO
 
-## Available Scripts
+### /////////ESPANOL
 
-In the project directory, you can run:
+Hola! Bienvenido a Data-warehouse.
 
-### `npm start`
+Antes de iniciar DATA-WAREHOUSE usted debe considerar las siguientes pautas:
+**1** - En caso de no tener instalado XAMPP, debe instalar el mismo.
+-link de instalador:
+https://www.apachefriends.org/es/index.html
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**2**
+Una vez instalado XAMPP, inicie la aplicacion.
+**3**
+Dentro de XAMPP, en las filas de APACHE y MySQL presione START.
+**4**
+Una vez presionado START en ambas filas, sobre la fila de MySQL presione ADMIN
+esto abrira el administrador de bases de datos MySQL en su navegador.
+CREACION DE BASE DE DATOS
+**1**
+Dentro del administrador, en la barre de navegacion lateral, va a encontrar varias opciones.
+Presione en la primer opcion llamada NUEVA.
+**2**
+Dentro de la opcion NUEVA, en la barra superior, presione la segunda opcion llamada SQL.
+**3**
+Una vez dentro de SQL, abra el archivo DB.sql que se encuentra junto al archivo READ-ME.MD
+**4**
+Copie todo lo que se encuentra dentro de este archivo y vuelva al navegador donde debera pegar lo copiado anteriormente.
+**5**
+Con los queries pegados, presione el boton CONTINUAR que se encuentra debajo a la derecha.
+**6**
+Si no tuvo ningun error en la ejecucion, la base de datos y sus tablas pertinentes fueron creadas exitosamente.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+      Informacion para usuarios.
+    > USUARIO: admin@admin.com y CONTRASENA: admin.
+    Asi mismo, el usuario que no posee permisos de administardor tiene como
+    > USUARIO: usuario@live.com CONTRASENA: 123456
 
-### `npm test`
+## EJECUCION DATA_WAREHOUSE
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**1** Dentro de VS CODE abra una nueva terminal.
+**2** Una vez dentro de la carpeta donde se encuentra el proyecto DATA WAREHOUSE corra el codigo
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+        npm start
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**3** Revise la consola, deberia leer:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+> > data-warehouse@0.1.0 start C:\Users\Moren\Desktop\ACAMICA\PROYECTOS\data_warehouse\data-warehouse
+> > react-scripts start.
 
-### `npm run eject`
+**4** Una vez iniciado que corrio la aplicacion deberia abrir otra terminal paralela para correr el codigo que permite
+utilizar el backend.
+Sobre la carpeta donde se encuentra DATA_WAREHOUSE corra el siguiente codigo:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+        cd ./backedn
+        node server
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**5** Deberia observar en la consola:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+> App corriendo en puerto 9000
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+**6** En caso de verificar correctamente lo dicho anteriormente, ya se encuentra listo para probar DATA-WAREHOUSE.
 
-## Learn More
+### CONSIDERACIONES
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Para un uso mas rapido de la aplicacion, BD y sus respectivas tablas, se agregaron datos a todas las tablas.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## ////////// DATA_WAREHOUSE
+###. Created by: MORENO PRETO
+### /////////ENGLISH
+Hello! Welcome to Data-warehouse.
 
-### Code Splitting
+Before starting DATA-WAREHOUSE you should consider the following guidelines:
+   **1**
+    - If you don't have XAMPP installed, you must install it.
+-installer link:
+    https://www.apachefriends.org/es/index.html
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+   **2**
+    Once XAMPP is installed, start the application.
+   **3**
+    Inside XAMPP, in the APACHE and MySQL rows press START.
+   **4**
+    Once START is pressed in both rows, on the MySQL row press ADMIN
+    this will open the MySQL database manager in your browser.
+    CREATION OF DATABASE
+    **1**
+     Within the administrator, in the side navigation bar, you will find several options.
+    Click on the first option called NEW.
+    **2**
+    Inside the NEW option, on the top bar, press the second option called SQL.
+    **3**
+    Once inside SQL, open the DB.sql file that is next to the READ-ME.MD file
+    **4**
+    Copy everything that is inside this file and return to the browser where you should paste what you copied previously.
+    **5**
+    With the queries pasted, press the CONTINUE button located at the bottom right.
+    **6 **
+   If you did not have any errors in the execution, the database and its relevant tables were created successfully.
 
-### Analyzing the Bundle Size
+      Information for users.
+    > USER: admin@admin.com and PASSWORD: admin.
+    Likewise, the user who does not have administrator permissions has as
+    > USER: user@live.com PASSWORD: 123456
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## DATA_WAREHOUSE EXECUTION
+   ** 1 ** Inside VS CODE open a new terminal.
+   ** 2 ** Once inside the folder where the DATA WAREHOUSE project is located, run the code
+    
+        npm start
+    
+  ** 3 ** Check the console, it should read:
+  
+  >> data-warehouse@0.1.0 start C: \ Users \ Moren \ Desktop \ ACAMICA \ PROJECTS \ data_warehouse \ data-warehouse
+    > react-scripts start.
 
-### Making a Progressive Web App
+ ** 4 ** Once the application has started, it should open another parallel terminal to run the code that allows
+    use the backend.
+    On the folder where DATA_WAREHOUSE is located, run the following code:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+        cd ./backedn
+        node server
 
-### Advanced Configuration
+ ** 5 ** You should see on the console:
+   > App running on port 9000
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+ ** 6 ** If you correctly verify the above, you are ready to test DATA-WAREHOUSE.
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### CONSIDERATIONS
+   For a faster use of the application, DB and its respective tables, data was added to all tables.

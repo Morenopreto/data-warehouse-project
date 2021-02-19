@@ -7,18 +7,20 @@ export const CompaniesContext = createContext();
 
 
 const CompaniesProvider = ({ children }) => {
-    const { tokenState } = useContext(LogInContext);
+    const { tokenState, userHasAuthenticated } = useContext(LogInContext);
     const [allCompanies, setAllCompanies] = useState([]);
     const [fetchStatus, setFetchStatus] = useState(null)
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", `Bearer ${tokenState}`);
 
+    useEffect(() => {
+        getAllCompanies();
+    }, []);
 
     const addCompany = (data) => {
         setFetchStatus('fetching');
         var raw = JSON.stringify(data);
-        // myHeaders.append("Authorization", `Bearer ${tokenState}`);
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -29,14 +31,19 @@ const CompaniesProvider = ({ children }) => {
         fetch(`http://localhost:9000/companies/newCompany`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                (!result.requestInfo[0]['error']) ?
-                    setFetchStatus(true) : setFetchStatus(false);
-                console.log(!result.requestInfo[0]['error'])
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
+                if (result.requestInfo.code === 200) {
+                    setFetchStatus(true)
+                } else {
+                    setFetchStatus(false)
+                }
             })
             .catch(error => {
                 console.log('error', error)
-
-                // setFetchStatus(false)
+                setFetchStatus(false)
             })
             .finally(() => { setTimeout(() => { setFetchStatus(null) }, 1500) })
 
@@ -52,8 +59,11 @@ const CompaniesProvider = ({ children }) => {
         fetch(`http://localhost:9000/companies`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                setAllCompanies(result.data)
-
+                setAllCompanies(result.data.data)
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    userHasAuthenticated(result.data.isAuthenticated)
+                }
                 console.log(result.data)
             })
             .catch(error => console.log('error', error));
@@ -74,7 +84,11 @@ const CompaniesProvider = ({ children }) => {
             .then(result => {
                 console.log(result)
                 getAllCompanies()
-                // GetUserData(tokenState, 1)
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    userHasAuthenticated(result.data.isAuthenticated)
+                }
+
             })
             .catch(error => console.log(error));
     }
@@ -89,7 +103,10 @@ const CompaniesProvider = ({ children }) => {
             .then(response => response.json())
             .then(result => {
                 console.log(result)
-
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
                 getAllCompanies(tokenState, 1)
 
             })
@@ -105,7 +122,7 @@ const CompaniesProvider = ({ children }) => {
                 addCompany: addCompany,
                 modifyCompany: modifyCompany,
                 getAllCompanies: getAllCompanies,
-                deleteCompanyFromDB:deleteCompanyFromDB
+                deleteCompanyFromDB: deleteCompanyFromDB
 
             }}
         >

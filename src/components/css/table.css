@@ -188,6 +188,5 @@
   box-shadow: 0px 7px 9px 6px lightgrey;
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
   justify-content: center;
 }

@@ -13,9 +13,6 @@
 .label-double-mail {
   text-align: center;
 }
-.submit-button {
-  margin-left: 91%;
-}
 .inlineGroup {
   width: 42.5%;
   margin: 20px 0;
@@ -38,38 +35,4 @@
 }
 .form-section-modal {
   background: #fff !important;
-}
-.loading {
-  color: white;
-  animation: loading 1.5s infinite cubic-bezier(0.42, 0, 0.61, 0.91);
-}
-@keyframes loading {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.submit-ok {
-  color: white;
-  animation: submitAccepted 1.5s infinite cubic-bezier(0.99, 0.11, 0.09, 0.99);
-}
-@keyframes submitAccepted {
-  0% {
-    transform: scale(0.6);
-  }
-  100% {
-    transform: scale(1.4);
-  }
-}
-.submit-ok-btn {
-  border-color: #358873;
-  background: #4e9c81 !important;
-  padding: 10px 40px;
-}
-.submit-err-btn {
-  background: #e57373 !important;
-  border: 1px solid #c62828;
-  padding: 10px 40px;
 }

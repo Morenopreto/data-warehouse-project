@@ -1,32 +1,27 @@
-import { React, useState, useContext, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-import '../css/form.css';
+import { React, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+//BOOTSTRAP
+import { Form } from 'react-bootstrap';
+//CONTEXT
 import { UserFormContext } from '../../context/usersFormContext'
 import { UserTableContext } from '../../context/userTableContext'
-import { LogInContext } from '../../context/logInContext';
-import Inputs from './inputs';
+import { CompaniesContext } from '../../context/companiesContext'
+//COMPONENTS
+import Inputs from '../supportComp/inputs';
+import Button from '../supportComp/button';
+import '../css/form.css';
 
-function NewContactForm({ data,setModalStatus }) {
-    console.log(data)
-    const [status, setStatus] = useState(true);
+function NewContactForm({ data, setModalStatus }) {
+
+    const history = useHistory();
     const [newContactInfo, setNewContactInfo] = useState({});
-    const { addContact, modifyContact } = useContext(UserFormContext);
+    const { addContact, modifyContact, fetchStatus } = useContext(UserFormContext);
     const { infoCountries } = useContext(UserTableContext);
-    // let disabled = true;
-    // useEffect(() => {
-    //     (newContactInfo.length)?disabled=false:disabled=true;
-    // }, [newContactInfo])
+    const { allCompanies } = useContext(CompaniesContext);
+    console.log(allCompanies)
 
+    if (fetchStatus === true) { setTimeout(() => { history.push('/contacts') }, 1500) }
 
-    const handleActive = () => {
-
-        //chequear que funcion de manera correcta!!!!
-
-        if (Array.from(document.getElementsByTagName('input')).map(item => !!item.value).find(item => item === false) === undefined
-            // && document.querySelectorAll("input[type=password]")[0].value !== document.querySelectorAll("input[type=password]")[1].value
-        ) { setStatus(false); console.log('viene a if') } else { setStatus(true); console.log('viene a else') };
-    }
     const submitNewContact = (e) => {
         e.preventDefault();
         addContact(newContactInfo);
@@ -39,7 +34,7 @@ function NewContactForm({ data,setModalStatus }) {
     }
 
     const getInfo = (objectTag, value) => {
-        console.log(objectTag, value)
+
         if (objectTag === 'name') setNewContactInfo({ ...newContactInfo, name: value })
         if (objectTag === 'surname') setNewContactInfo({ ...newContactInfo, surname: value })
         if (objectTag === 'mail') setNewContactInfo({ ...newContactInfo, mail: value })
@@ -76,8 +71,7 @@ function NewContactForm({ data,setModalStatus }) {
                     objectTag='company_name'
                     type='sq-select'
                     defaultValue={data?.company}
-                    //despues cambiar la data de este input por un map!
-                    data={['Plus Cargo', 'Del Beagle', 'Frodas', 'Chandon', 'El purgatorio bar', 'Aerolab', 'AWE Systems', 'Los Yamanas']}
+                    data={Array.from(allCompanies.map(item => item.company))}
                     moreInformation='Si la ciudad no se encuentra, debe agregarla desde la seccion compañias.'
 
                     getInfo={getInfo} />
@@ -93,12 +87,10 @@ function NewContactForm({ data,setModalStatus }) {
 
 
                 {(!data) ?
-                    <button className='generic-button align-right'>
-                        Sumbit
-                </button> :
-                    <button className='generic-button align-right-modal' type='submit' disabled={!!newContactInfo[0]}>
-                        Guardar Cambios
-                </button>}
+                    <Button fetchStatus={fetchStatus} tagName={'Agregar'} />
+                    :
+                    <Button fetchStatus={fetchStatus} tagName={'Guardar'} disabledParam={!!newContactInfo[0]} />}
+
 
 
 

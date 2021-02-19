@@ -27,7 +27,6 @@ const LogInProvider = ({ children }) => {
             console.log(tokenState)
         };
     }, [tokenState])
-    // useEffect(() => { console.log(token) }, [token])
 
     const LogIn = (mail, pass) => {
         setLogInStatus(true)
@@ -44,16 +43,12 @@ const LogInProvider = ({ children }) => {
         fetch("http://localhost:9000/users/login", requestOptions)
             .then(response => response.json())
             .then(result => {
+
                 setTokenCallback(result.data.token, result.data.isAuthenticated, result.data.mail, result.data.admin)
-                console.log(result.data.admin)
-
-                // sessionStorage.setItem('Token', result.data.token);
+                if (!result.data.isAuthenticated) {
+                    userHasAuthenticated(result.data.isAuthenticated)
+                }
             })
-
-            // .finally(() => {
-
-            // }
-            // )
 
             .catch(error => console.log('error', error));
     }
@@ -71,7 +66,6 @@ const LogInProvider = ({ children }) => {
         myHeaders.append("Authorization", `Bearer ${token}`);
         console.log(`Bearer ${token}`)
 
-
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -82,9 +76,13 @@ const LogInProvider = ({ children }) => {
             .then(response => response.json())
             .then(result => {
 
-                setInfoContacts(result.data)
-                console.log(result.data)
+                console.log('result')
+                console.log(result)
+                setInfoContacts(result.data.data)
                 setPagination(result.PaginationInfo)
+                if (!result.data.isAuthenticated) {
+                    userHasAuthenticated(result.data.isAuthenticated)
+                }
             })
             .catch(error => console.log('error', error));
     }
@@ -103,7 +101,7 @@ const LogInProvider = ({ children }) => {
                 tokenState: tokenState,
                 infoContacts: infoContacts,
                 pagination: pagination,
-                logInStatus:logInStatus,
+                logInStatus: logInStatus,
                 LogIn: LogIn,
                 isAuthenticated: isAuthenticated,
                 userHasAuthenticated: userHasAuthenticated,

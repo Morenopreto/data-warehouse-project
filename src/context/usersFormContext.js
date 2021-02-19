@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext } from 'react';
 import { LogInContext } from './logInContext'
 
 
@@ -7,7 +7,7 @@ export const UserFormContext = createContext();
 
 
 const UserFormProvider = ({ children }) => {
-    const { tokenState, userMail, GetUserData } = useContext(LogInContext);
+    const { tokenState, userMail, GetUserData, userHasAuthenticated } = useContext(LogInContext);
     const [allUser, setAllUsers] = useState([]);
     const [fetchStatus, setFetchStatus] = useState(null)
     var myHeaders = new Headers();
@@ -29,9 +29,13 @@ const UserFormProvider = ({ children }) => {
         fetch(`http://localhost:9000/users/newUser`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                (!result.requestInfo[0]['error']) ?
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
+
+                (result.requestInfo.code === 200) ?
                     setFetchStatus(true) : setFetchStatus(false);
-                console.log(!result.requestInfo[0]['error'])
             })
             .catch(error => {
                 console.log('error', error)
@@ -52,9 +56,12 @@ const UserFormProvider = ({ children }) => {
         fetch(`http://localhost:9000/users?mail=${userMail}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                if (!!result.data[0]?.user_id) {
-                    setAllUsers(result.data)
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
                 }
+                setAllUsers(result.data.data)
+
                 console.log(result.data)
             })
             .catch(error => console.log('error', error));
@@ -72,6 +79,10 @@ const UserFormProvider = ({ children }) => {
         fetch(`http://localhost:9000/users/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
                 getAllUsers()
                 console.log(result)
             })
@@ -79,6 +90,7 @@ const UserFormProvider = ({ children }) => {
     }
     ///////CONTACTOS
     const addContact = (data) => {
+        setFetchStatus('fetching')
         var raw = JSON.stringify(data);
         console.log(raw)
         // myHeaders.append("Authorization", `Bearer ${tokenState}`);
@@ -92,9 +104,15 @@ const UserFormProvider = ({ children }) => {
         fetch(`http://localhost:9000/contacts/newContact`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
+
+                (result.requestInfo.code === 200) ? setFetchStatus(true) : setFetchStatus(false)
             })
-            .catch(error => console.log('error', error));
+            .catch(error => console.log('error', error))
+            .finally(() => { setTimeout(() => { setFetchStatus(null) }, 1500) })
     }
     const modifyContact = (id, changes) => {
 
@@ -109,12 +127,16 @@ const UserFormProvider = ({ children }) => {
         fetch(`http://localhost:9000/contacts/${id}/modify`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
                 console.log(result)
                 GetUserData(tokenState, 1)
             })
             .catch(error => console.log('error', error));
     }
-    const deleteFromDB = (id,where) => {
+    const deleteFromDB = (id, where) => {
 
         var requestOptions = {
             method: 'DELETE',
@@ -125,9 +147,13 @@ const UserFormProvider = ({ children }) => {
             .then(response => response.json())
             .then(result => {
                 console.log(result)
-                if(where==='contacts'){
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
+                if (where === 'contacts') {
                     GetUserData(tokenState, 1)
-                }else if(where==='users'){
+                } else if (where === 'users') {
                     getAllUsers()
                 }
             })

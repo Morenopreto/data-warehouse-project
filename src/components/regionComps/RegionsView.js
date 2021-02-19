@@ -1,26 +1,28 @@
 
 import React, { useCallback, useState, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { UserTableContext } from '../context/userTableContext'
-import { RegionsContext } from '../context/regionsContext'
+//CONTEXT
+import { UserTableContext } from '../../context/userTableContext'
+import { RegionsContext } from '../../context/regionsContext'
+//HYPER-TREE
 import Tree, {
     useTreeState,
     treeHandlers,
 } from 'react-hyper-tree';
+//ICONS
 import { GrEdit } from 'react-icons/gr';
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai';
 import { FaTrash } from 'react-icons/fa';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
-import EditModal from './editModal';
-import Inputs from './newUserForm/inputs';
-import './css/tree.css'
+//COMPONENTS & CSS
+import Inputs from '../supportComp/inputs';
+import '../css/tree.css'
 
 const RegionsView = () => {
     let data2 = []
     const [displayActions, setDisplayActions] = useState({ bool: false, name: null });
     const [displayInput, setDisplayInput] = useState({ bool: false, name: null });
     const [dataTree, setDataTree] = useState([]);
-    const [displayPlegable, setDisplayPlegable] = useState(false);
     const [newRegionsInfo, setNewRegionsInfo] = useState({});
 
     const { infoCountries } = useContext(UserTableContext)
@@ -74,9 +76,9 @@ const RegionsView = () => {
     const getInfo = (objectTag, value) => {
         console.log('objectTag, value')
         console.log(objectTag, value)
-        if (objectTag === 'regions') { setNewRegionsInfo({ where: objectTag, region_name: value });console.log(value) }
-        if (objectTag === 'countries') { setNewRegionsInfo({ where: objectTag, country_name: value });console.log(value) } // aca deberia pasar el region_id
-        if (objectTag === 'cities') { setNewRegionsInfo({ where: objectTag, city_name: value });console.log(value) }//aca deberia pasar el country_id
+        if (objectTag === 'regions') { setNewRegionsInfo({ where: objectTag, region_name: value }); console.log(value) }
+        if (objectTag === 'countries') { setNewRegionsInfo({ where: objectTag, country_name: value }); console.log(value) } // aca deberia pasar el region_id
+        if (objectTag === 'cities') { setNewRegionsInfo({ where: objectTag, city_name: value }); console.log(value) }//aca deberia pasar el country_id
 
     }
 
@@ -170,7 +172,7 @@ const RegionsView = () => {
         <section className='regions-sect'>
             <h1>Regiones</h1>
             <div className='userComp-div'>
-                    <NavLink className='generic-button' to={{ pathname: `/regions/addNew` }}> + Agregar </NavLink>
+                <NavLink className='generic-button' to={{ pathname: `/regions/addNew` }}> + Agregar </NavLink>
             </div>
             <Tree
                 {...required}
@@ -181,7 +183,6 @@ const RegionsView = () => {
                 disableLines={true}
                 renderNode={renderNode}
             />
-            {/* <EditModal modalStatus={modalStatus} setModalStatus={setModalStatus} modalData={modalData} /> */}
 
         </section>
     )

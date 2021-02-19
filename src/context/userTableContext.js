@@ -7,7 +7,7 @@ export const UserTableContext = createContext();
 
 
 const UserTableProvider = ({ children }) => {
-    const { setInfoContacts, tokenState, setTokenCallback } = useContext(LogInContext);
+    const { setInfoContacts, tokenState, userHasAuthenticated } = useContext(LogInContext);
     const [infoCountries, setInfoCountries] = useState([]);
     const [searchParameter, setSearchParameter] = useState([]);
     const [hiddenSearch, setHiddenSearch] = useState(true);
@@ -36,13 +36,17 @@ const UserTableProvider = ({ children }) => {
         fetch("http://localhost:9000/cities", requestOptions)
             .then(response => response.json())
             .then(result => {
-                setInfoCountries(result.data)
-                // console.log(result.data)
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a experido')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
+
+                setInfoCountries(result.data.data)
             })
             .catch(error => console.log('error', error));
     }
     const addItemToSearch = (e, parameter) => {
-        // console.log({ parameter: value });
+        console.log(searchParameter)
         let value = e.target.value.trim().toLowerCase()
         if ((e.keyCode === 13 || e.keyCode === 9) && value.length != 0) {
 
@@ -104,7 +108,7 @@ const UserTableProvider = ({ children }) => {
         let queryParams = array.map(item => `${Object.keys(item)[0]}='${item[Object.keys(item)]}'`).join('&')
         myHeaders.append("Authorization", `Bearer ${tokenState}`);
         // myHeaders.append("Content-Type", "application/json");
-
+        console.log(queryParams)
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -115,12 +119,12 @@ const UserTableProvider = ({ children }) => {
             .then(response => response.json())
             .then(result => {
 
-                if (result.data.token === null) {
-                    return setTokenCallback(result.data.token, result.data.isAuthenticated)
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
                 }
-
-                result.data.map(item => { item.isChecked = false });
-                setInfoContacts(result.data)
+                // result.data.data.map(item => { item.isChecked = false });
+                setInfoContacts(result.data.data)
 
             })
             .catch(error => console.log(error));
@@ -135,7 +139,7 @@ const UserTableProvider = ({ children }) => {
                 hiddenSearch: hiddenSearch,
                 //METHODS
                 addItemToSearch: addItemToSearch,
-                GetCountryData:GetCountryData,
+                GetCountryData: GetCountryData,
                 hiddenSearchModify: hiddenSearchModify,
                 setSearchParameter: setSearchParameter,
                 deletePill: deletePill,

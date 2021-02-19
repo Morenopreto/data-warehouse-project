@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { UserTableContext } from '../../context/userTableContext'
 
-function SearchForm({ hiddenSearch, infoContactsSort }) {
+function ContactsSearchForm({ hiddenSearch, infoContactsSort }) {
 
 
     const { infoCountries, addItemToSearch } = useContext(UserTableContext);
@@ -10,16 +10,16 @@ function SearchForm({ hiddenSearch, infoContactsSort }) {
         <form className='search-form' hidden={hiddenSearch}>
             <div className='search-form-divs'>
                 <label>Nombre contacto:</label>
-                <input type='text' className='search-form-inputs' placeholder='Introduce el nombre del contacto.' onKeyDown={(e)=>addItemToSearch(e,'name')} />
+                <input type='text' className='search-form-inputs' placeholder='Introduce el nombre del contacto.' onKeyDown={(e) => addItemToSearch(e, 'name')} />
             </div>
             <div className='search-form-divs'>
                 <label>Cargo:</label>
-                <input type='text' className='search-form-inputs' placeholder='Introduce el cargo del contacto.' onKeyDown={(e)=>addItemToSearch(e,'position')} />
+                <input type='text' className='search-form-inputs' placeholder='Introduce el cargo del contacto.' onKeyDown={(e) => addItemToSearch(e, 'position')} />
             </div>
             <div className='search-form-divs'>
                 <label>Ciudad:</label>
 
-                <select  name="city" className='search-form-selects' id="cities" onKeyDown={(e)=>addItemToSearch(e,'city')}>
+                <select name="city" className='search-form-selects' id="cities" onKeyDown={(e) => addItemToSearch(e, 'city')}>
                     <option value="todas">Todos</option>
                     {infoCountries?.map((data, key) => (
                         <option key={`op-city-${key}`} value={data.city_name}>{data.city_name}</option>
@@ -30,7 +30,7 @@ function SearchForm({ hiddenSearch, infoContactsSort }) {
             <div className='search-form-divs'>
                 <label>Pais:</label>
 
-                <select name="country" className='search-form-selects' id="countries" onKeyDown={(e)=>addItemToSearch(e,'country')}>
+                <select name="country" className='search-form-selects' id="countries" onKeyDown={(e) => addItemToSearch(e, 'country')}>
                     <option value="todas">Todos</option>
 
                     {[...new Set(infoCountries?.map(data => data.country_name))]?.map((data, key) => (
@@ -42,7 +42,7 @@ function SearchForm({ hiddenSearch, infoContactsSort }) {
             <div className='search-form-divs'>
                 <label>Region:</label>
 
-                <select name="region" className='search-form-selects' id="regions" onKeyDown={(e)=>addItemToSearch(e,'region')}>
+                <select name="region" className='search-form-selects' id="regions" onKeyDown={(e) => addItemToSearch(e, 'region')}>
                     <option value="todas">Todos</option>
 
                     {[...new Set(infoCountries?.map(data => data.region_name))]?.map((data, key) => (
@@ -57,7 +57,7 @@ function SearchForm({ hiddenSearch, infoContactsSort }) {
             </div>
             <div className='search-form-divs'>
                 <label>Compania:</label>
-                <select name="company" className='search-form-selects' id="companies" onKeyDown={(e)=>addItemToSearch(e,'company')}>
+                <select name="company" className='search-form-selects' id="companies" onKeyDown={(e) => addItemToSearch(e, 'company')}>
                     <option value="todas" disabled>Todas</option>
                     {[...new Set(infoContactsSort?.map(data => data.company))]?.map((data, key) => (
                         <option key={`op-company-${key}`} value={data}>{data}</option>
@@ -65,18 +65,9 @@ function SearchForm({ hiddenSearch, infoContactsSort }) {
                     )}
                 </select>
             </div>
-            {/* <div className='search-form-divs'>
-
-                <label>Canal Favorito:</label>
-                <select name="favourite" className='search-form-selects' id="favourites">
-                    <option value="volvo">Cualquiera</option>
-                    <option value="mercedes">whataspa</option>
-                    <option value="audi">textmessage</option>
-                </select>
-            </div> */}
             <div className='search-form-divs'>
                 <label>Interes:</label>
-                <select name="interest" className='search-form-selects' id="interests" onKeyDown={(e)=>addItemToSearch(e,'interest')}>
+                <select name="interest" className='search-form-selects' id="interests" onKeyDown={(e) => addItemToSearch(e, 'interest')}>
                     <option value="volvo">Cualquiera</option>
                     <option value="0%">0%</option>
                     <option value="25">25%</option>
@@ -89,4 +80,4 @@ function SearchForm({ hiddenSearch, infoContactsSort }) {
         </form>
     )
 }
-export default SearchForm;
+export default ContactsSearchForm;

@@ -14,7 +14,23 @@ router.get('/', validacionjwt, async (req, res) => {
     const { user_id } = req.infoToken;
     // const { offset } = (req.query) ? Math.floor(req.query)-(req.query%10) : 0;
     const { offset } = req.query;
-    const offsetNumber = (Number(offset)) ? Math.floor(Number(offset)) - (Number(offset) % 10) : 0;
+    // const offsetNumber = (Number(offset)) ? Math.floor(Number(offset)) - (Number(offset) % 10) : 0;
+    const offsetNumber = Number(offset);
+    if (Number(offset) % 10 !== 0) {
+        const response = {
+            "requestInfo":
+            {
+                'code': 400,
+                'description': `Offset number must be multiple of ten`,
+                'date': new Date()
+            },
+            "data": {
+                "isAuthenticated": true
+            }
+
+        }
+        res.status(400).json(response)
+    }
     let queryParams = '';
     if (req.query) {
         let { name, position, city, country, region, company, interest } = req.query;
@@ -30,30 +46,33 @@ router.get('/', validacionjwt, async (req, res) => {
 
     try {
         // const data = await sequelize.query('SELECT * FROM contacts WHERE active = 1 and user_id = ?',
-        const data = await sequelize.query(`SELECT contacts.contact_id,contacts.name, contacts.surname, contacts.position, contacts.mail, contacts.interest, cities.city_name AS city, countries.country_name AS country, regions.region_name AS regions, companies.company_name AS company FROM contacts INNER JOIN cities ON contacts.city_id = cities.city_id INNER JOIN countries ON countries.country_id = cities.country_id  INNER JOIN regions ON countries.region_id = regions.region_id INNER JOIN companies ON companies.company_id = contacts.company_id WHERE contacts.active = 1 AND companies.active = 1 ${queryParams} AND user_id = ? LIMIT 10 OFFSET ?`,
+        const data = await sequelize.query(`SELECT contacts.contact_id,contacts.name, contacts.surname, contacts.position, contacts.mail, contacts.interest, cities.city_name AS city, countries.country_name AS country, regions.region_name AS regions, companies.company_name AS company FROM contacts INNER JOIN cities ON contacts.city_id = cities.city_id INNER JOIN countries ON countries.country_id = cities.country_id  INNER JOIN regions ON countries.region_id = regions.region_id INNER JOIN companies ON companies.company_id = contacts.company_id WHERE contacts.active = 1 AND companies.active = 1 AND regions.active = 1 AND countries.active = 1 AND cities.active = 1 ${queryParams} AND user_id = ? LIMIT 10 OFFSET ?`,
             {
                 replacements: [user_id, offsetNumber],
                 type: sequelize.QueryTypes.SELECT
             })
-        const pageCount = await sequelize.query('SELECT COUNT(*) AS `Rows` FROM `contacts` WHERE contacts.active = 1 and user_id = ?',
+        const pageCount = await sequelize.query('SELECT COUNT(*) AS `Rows` FROM `contacts`INNER JOIN cities ON contacts.city_id = cities.city_id INNER JOIN countries ON countries.country_id = cities.country_id INNER JOIN regions ON countries.region_id = regions.region_id INNER JOIN companies ON companies.company_id = contacts.company_id WHERE user_id = ? AND contacts.active = 1 AND companies.active = 1 AND regions.active = 1 AND countries.active = 1 AND cities.active = 1',
             {
                 replacements: [user_id],
                 type: sequelize.QueryTypes.SELECT
             })
-        console.log(pageCount[0].Rows)
+        // console.log(pageCount[0].Rows)
         const response = {
-            "request info":
+            "requestInfo":
             {
                 'code': 200,
                 'description': 'success!',
                 'date': new Date()
             },
             'PaginationInfo': {
-                'Page': ((Math.floor(offsetNumber) - (offsetNumber % 10)) / 10 + 1),
-                'PageCount': Math.round(Math.round(pageCount[0].Rows) / 10)
+                'Page': ((offsetNumber / 10) + 1),
+                'PageCount': (Math.round(Math.round(pageCount[0].Rows) / 10) + 1)
             }
             ,
-            "data": data
+            "data": {
+                "data": data,
+                "isAuthenticated": true
+            }
         }
         res.status(200).json(response)
     }
@@ -65,17 +84,20 @@ router.get('/', validacionjwt, async (req, res) => {
 })
 
 router.post('/newContact', validacionjwt, async (req, res) => {
-    const { name, surname, position, mail, interest, company_id, city_name, company_name } = req.body;
+    const { name, surname, position, mail, interest, city_name, company_name } = req.body;
     const { user_id } = req.infoToken
     if (!name || !surname || !position || !mail || !interest || !company_name || !city_name) {
         const response = {
-            "request info": [
-                {
-                    'code': 400,
-                    'description': 'name, surname, position, mail, interest, company_id, city_id cant be undefined',
-                    'date': new Date()
-                }
-            ]
+            "requestInfo":
+            {
+                'code': 400,
+                'description': 'name, surname, position, mail, interest, company_id, city_id cant be undefined',
+                'date': new Date()
+            }
+            ,
+            "data": {
+                "isAuthenticated": true
+            }
         }
         res.status(400).json(response);
     } else {
@@ -96,13 +118,16 @@ router.post('/newContact', validacionjwt, async (req, res) => {
                 type: sequelize.QueryTypes.INSERT
             })
             const response = {
-                "request info": [
-                    {
-                        'code': 200,
-                        'description': 'new contact added correctly!',
-                        'date': new Date()
-                    }
-                ]
+                "requestInfo":
+                {
+                    'code': 200,
+                    'description': 'new contact added correctly!',
+                    'date': new Date()
+                }
+                ,
+                "data": {
+                    "isAuthenticated": true
+                }
             }
             res.status(200).json(response)
         } catch (error) {
@@ -188,25 +213,31 @@ router.patch('/:contact_id/modify', validacionjwt, async (req, res) => {
 
 
             const response = {
-                "request info": [
-                    {
-                        'code': 200,
-                        'description': `contact_id ${contact_id} modified correctly!`,
-                        'date': new Date()
-                    }
-                ]
+                "requestInfo":
+                {
+                    'code': 200,
+                    'description': `contact_id ${contact_id} modified correctly!`,
+                    'date': new Date()
+                },
+                "data": {
+                    "isAuthenticated": true
+                }
+
             }
             res.status(200).json(response)
         }
         else {
             const response = {
-                "request info": [
-                    {
-                        'code': 400,
-                        'description': `contact_id ${contact_id} does not exist`,
-                        'date': new Date()
-                    }
-                ]
+                "requestInfo":
+                {
+                    'code': 400,
+                    'description': `contact_id ${contact_id} does not exist`,
+                    'date': new Date()
+                }
+                ,
+                "data": {
+                    "isAuthenticated": true
+                }
             }
             res.status(400).json(response)
         }
@@ -236,25 +267,31 @@ router.delete('/:contact_id/delete', validacionjwt, async (req, res) => {
                         type: sequelize.QueryTypes.UPDATE
                     })
                 const response = {
-                    "request info": [
-                        {
-                            'code': 200,
-                            'description': `contact_id: ${contact_id} is now inactive.`,
-                            'date': new Date()
-                        }
-                    ]
+                    "requestInfo":
+                    {
+                        'code': 200,
+                        'description': `contact_id: ${contact_id} is now inactive.`,
+                        'date': new Date()
+                    }
+                    ,
+                    "data": {
+                        "isAuthenticated": true
+                    }
                 }
                 res.status(200).json(response)
             }
             else {
                 const response = {
-                    "request info": [
-                        {
-                            'code': 400,
-                            'description': `contact_id: ${contact_id} does not exist.`,
-                            'date': new Date()
-                        }
-                    ]
+                    "requestInfo":
+                    {
+                        'code': 400,
+                        'description': `contact_id: ${contact_id} does not exist.`,
+                        'date': new Date()
+                    },
+                    "data": {
+                        "isAuthenticated": true
+                    }
+
                 }
                 res.status(400).json(response)
             }
@@ -264,15 +301,20 @@ router.delete('/:contact_id/delete', validacionjwt, async (req, res) => {
 
     }
     else {
-        const response = {
-            "request info": [
-                {
-                    'code': 400,
-                    'description': `'eliminado' parameter must be boolean.`,
-                    'date': new Date()
-                }
-            ]
+        let response = {
+            "requestInfo":
+            {
+                'code': 400,
+                'description': `'eliminado' parameter must be boolean.`,
+                'date': new Date()
+            },
+            "data": {
+                "isAuthenticated": true
+            }
+
         }
+
+
         res.status(400).json(response)
     }
 

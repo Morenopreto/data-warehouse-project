@@ -6,7 +6,7 @@ const sequelize = require('../seq-conexion.js');
 // COMPAÑIAS
 // GET /compañias – JWT  OK
 // POST / compañias – JWT  OK
-// PATCH / compañias /{compañia_id} - JWT OK 
+// PATCH / compañias /{compañia_id} - JWT OK
 // DELETE / compañias /{compañia_id} – JWT OK
 
 
@@ -18,14 +18,16 @@ router.get('/', validacionjwt, async (req, res) => {
         const data = await sequelize.query('SELECT companies.company_id,companies.company_name AS company,companies.company_address AS address, companies.mail, companies.phone, cities.city_name AS city, countries.country_name AS country, regions.region_name AS region FROM companies INNER JOIN cities ON companies.city_id = cities.city_id INNER JOIN countries ON cities.country_id = countries.country_id INNER JOIN regions ON countries.region_id = regions.region_id WHERE companies.active = 1',
             { type: sequelize.QueryTypes.SELECT })
         const response = {
-            "request info": [
-                {
-                    'code': 200,
-                    'description': 'success!',
-                    'date': new Date()
-                }
-            ],
-            "data": data
+            "requestInfo":
+            {
+                'code': 200,
+                'description': 'success!',
+                'date': new Date()
+            },
+            "data": {
+                "data": data,
+                "isAuthenticated": true
+            }
         }
         res.status(200).json(response)
     }
@@ -36,34 +38,38 @@ router.get('/', validacionjwt, async (req, res) => {
 
 })
 
-router.post('/', validacionjwt, async (req, res) => {
+router.post('/newCompany', validacionjwt, async (req, res) => {
     const { company_name, company_address, mail, phone, city_id } = req.body;
-
-    if (!company_name || !company_address || !mail || !phone || !city_id) {
+    console.log(req.body)
+    if (!company_name || !company_address || !mail || !phone || !String(city_id)) {
         const response = {
-            "request info": [
-                {
-                    'code': 400,
-                    'description': 'company_name, company_address, mail, phone, city_id cant be undefined',
-                    'date': new Date()
-                }
-            ]
+            "requestInfo":
+            {
+                'code': 400,
+                'description': 'company_name, company_address, mail, phone, city_id cant be undefined',
+                'date': new Date()
+            },
+            "data": {
+                "isAuthenticated": true
+            }
         }
         res.status(400).json(response);
     } else {
         try {
             await sequelize.query('INSERT INTO companies (company_name, company_address, mail, phone, city_id, active) VALUES (?,?,?,?,?,?)', {
-                replacements: [company_name, company_address, mail, phone, city_id, 0],
+                replacements: [company_name, company_address, mail, phone, city_id, 1],
                 type: sequelize.QueryTypes.INSERT
             })
             const response = {
-                "request info": [
-                    {
-                        'code': 200,
-                        'description': 'new company added correctly!',
-                        'date': new Date()
-                    }
-                ]
+                "requestInfo":
+                {
+                    'code': 200,
+                    'description': 'new company added correctly!',
+                    'date': new Date()
+                },
+                "data": {
+                    "isAuthenticated": true
+                }
             }
             res.status(200).json(response)
         } catch (error) {
@@ -126,25 +132,31 @@ router.patch('/:company_id/modify', validacionjwt, async (req, res) => {
             }
 
             const response = {
-                "request info": [
-                    {
-                        'code': 200,
-                        'description': `company_id ${company_id} modified correctly!`,
-                        'date': new Date()
-                    }
-                ]
+                "requestInfo":
+                {
+                    'code': 200,
+                    'description': `company_id ${company_id} modified correctly!`,
+                    'date': new Date()
+                }
+                ,
+                "data": {
+                    "isAuthenticated": true
+                }
             }
             res.status(200).json(response)
         }
         else {
             const response = {
-                "request info": [
-                    {
-                        'code': 400,
-                        'description': `company_id ${company_id} does not exist`,
-                        'date': new Date()
-                    }
-                ]
+                "requestInfo":
+                {
+                    'code': 400,
+                    'description': `company_id ${company_id} does not exist`,
+                    'date': new Date()
+                }
+                ,
+                "data": {
+                    "isAuthenticated": true
+                }
             }
             res.status(400).json(response)
         }
@@ -173,25 +185,31 @@ router.delete('/:company_id/delete', validacionjwt, async (req, res) => {
                         type: sequelize.QueryTypes.UPDATE
                     })
                 const response = {
-                    "request info": [
-                        {
-                            'code': 200,
-                            'description': `company_id: ${company_id} is now inactive.`,
-                            'date': new Date()
-                        }
-                    ]
+                    "requestInfo":
+                    {
+                        'code': 200,
+                        'description': `company_id: ${company_id} is now inactive.`,
+                        'date': new Date()
+                    }
+                    ,
+                    "data": {
+                        "isAuthenticated": true
+                    }
                 }
                 res.status(200).json(response)
             }
             else {
                 const response = {
-                    "request info": [
-                        {
-                            'code': 400,
-                            'description': `company_id: ${company_id} does not exist.`,
-                            'date': new Date()
-                        }
-                    ]
+                    "requestInfo":
+                    {
+                        'code': 400,
+                        'description': `company_id: ${company_id} does not exist.`,
+                        'date': new Date()
+                    }
+                    ,
+                    "data": {
+                        "isAuthenticated": true
+                    }
                 }
                 res.status(400).json(response)
             }
@@ -202,13 +220,16 @@ router.delete('/:company_id/delete', validacionjwt, async (req, res) => {
     }
     else {
         const response = {
-            "request info": [
-                {
-                    'code': 400,
-                    'description': `'eliminado' parameter must be boolean.`,
-                    'date': new Date()
-                }
-            ]
+            "requestInfo":
+            {
+                'code': 400,
+                'description': `'eliminado' parameter must be boolean.`,
+                'date': new Date()
+            }
+            ,
+            "data": {
+                "isAuthenticated": true
+            }
         }
         res.status(400).json(response)
     }

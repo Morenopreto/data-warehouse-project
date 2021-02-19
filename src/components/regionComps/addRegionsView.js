@@ -1,69 +1,66 @@
 import { React, useState, useContext, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-import './css/form.css';
-import './css/addRegionsView.css';
-import { UserFormContext } from '../context/usersFormContext'
-import { UserTableContext } from '../context/userTableContext'
-import { LogInContext } from '../context/logInContext';
-import Inputs from './newUserForm/inputs';
+import { useHistory } from "react-router-dom";
+//BOOTSTRAP
+import { Form } from 'react-bootstrap';
+//CONTEXT
+import { RegionsContext } from '../../context/regionsContext'
+import { UserTableContext } from '../../context/userTableContext'
+//COMPONENTS
+import Inputs from '../supportComp/inputs';
+import Button from '../supportComp/button'
+import '../css/form.css';
+import '../css/addRegionsView.css';
 
-function AddRegions({ data }) {
+function AddRegions() {
 
 
-
+    const history = useHistory();
     // unable the section when the section above is complete
     const [showCountrySect, setShowCountrySect] = useState(false);
     const [showCitySect, setShowCitySect] = useState(false);
 
     //data for sq-select inputs
     const [countryData, setCountryData] = useState([]);
-    const [cityData, setCityData] = useState([]);
 
 
 
     const [newRegionInfo, setNewRegionInfo] = useState({});
-    const { addContact, modifyContact } = useContext(UserFormContext); // esto no va, cambiar por uno de regiones
+    const { addRegions, fetchStatus } = useContext(RegionsContext);
     const { infoCountries } = useContext(UserTableContext);
     useEffect(() => {
         setNewRegionInfo({})
-        console.log(newRegionInfo)
     }, [])
+    if (fetchStatus === true) { setTimeout(() => { history.push('/regions') }, 1500) }
 
 
     const submitNewRegionInfo = (e) => {
         e.preventDefault();
-        addContact(newRegionInfo);
-    }
-    const submitContactModified = (e, id) => {
-        e.preventDefault();
-        // console.log(id, newRegionInfo);
-        modifyContact(id, newRegionInfo);
+        addRegions(newRegionInfo);
     }
 
     const getInfo = (objectTag, value) => {
-        console.log(newRegionInfo)
+
         if (objectTag === 'region') {
-            setNewRegionInfo({ ...newRegionInfo, region: value });
+            setNewRegionInfo({ ...newRegionInfo, region_name: value })
             setCountryData([...new Set(infoCountries.filter(a => a.region_name == value).map(x => x.country_name)), '+ Agregar Pais'])
             setShowCountrySect(true)
             setShowCitySect(false)
 
         }
         if (objectTag === 'country') {
-            setNewRegionInfo({ ...newRegionInfo, country: value })
+            setNewRegionInfo({ ...newRegionInfo, country_name: value })
             setShowCitySect(true)
             // setCityData([...infoCountries.filter(a => a.country_name == value).map(x => x.city_name), '+ Agregar Ciudad'])
 
         }
-        if (objectTag === 'city') {setNewRegionInfo({ ...newRegionInfo, city: value })
-    console.log(value )}
+        if (objectTag === 'city') { setNewRegionInfo({ ...newRegionInfo, city_name: value }) }
+
     }
 
     return (
 
         <section className='form-section'>
-            <Form className='form-ctn' onSubmit={(e) => (!data) ? submitNewRegionInfo(e) : submitContactModified(e, data.contact_id)}>
+            <Form className='form-ctn' onSubmit={(e) => submitNewRegionInfo(e)}>
                 <Inputs
                     label='Region'
                     objectTag='region'
@@ -91,28 +88,19 @@ function AddRegions({ data }) {
                         objectTag='city'
                         type='sq-select'
                         data={['+ Agregar Ciudad']}
-                        moreInformation={`Ciudades de ${newRegionInfo?.country} ya agregadas: ${infoCountries.filter(a => a.country_name == newRegionInfo?.country ).map(x => ' '+x.city_name )}`}
+                        moreInformation={`Ciudades de ${newRegionInfo?.country_name} ya agregadas: ${infoCountries.filter(a => a.country_name == newRegionInfo?.country_name).map(x => ' ' + x.city_name)}`}
 
                         getInfo={getInfo} />
 
                 </fieldset>
-                {(newRegionInfo.region)?<h6>Informacion a agregar</h6>:''}
+                {(newRegionInfo.region_name) ? <h6>Informacion a agregar</h6> : ''}
                 <p>{`
-                ${(newRegionInfo.region) ? newRegionInfo.region : ''}
-                ${(newRegionInfo.country) ? ' - ' + newRegionInfo.country : ''}
-                ${(newRegionInfo.city) ? ' - ' + newRegionInfo.city : ''}`
+                ${(newRegionInfo.region_name) ? newRegionInfo.region_name : ''}
+                ${(newRegionInfo.country_name) ? ' - ' + newRegionInfo.country_name : ''}
+                ${(newRegionInfo.city_name) ? ' - ' + newRegionInfo.city_name : ''}`
                 }</p>
 
-                {(!data) ?
-                    <button className='generic-button align-right' disabled={!newRegionInfo.city}>
-                        Agregar
-                </button> :
-                    <button className='generic-button align-right-modal' type='submit' disabled={!!newRegionInfo[0]}>
-                        Guardar Cambios
-                </button>}
-
-
-
+                <Button fetchStatus={fetchStatus} disabledParam={!newRegionInfo.city_name} tagName={'Agregar'} />
             </Form>
         </section>
     )

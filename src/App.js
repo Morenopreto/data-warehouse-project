@@ -1,19 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 //COMPONENTS
 import NavbarComp from './components/navbar';
 import Login from './components/LoginView';
-import ContactsComp from './components/ContactsView';
-import UsersComp from './components/UsersView';
-import CompanyView from './components/companyView';
-import UserForm from './components/newUserForm/newUserView';
-import NewCompany from './components/newCompanyView';
-import NewContacForm from './components/newUserForm/newContactForm';
-import RegionsView from './components/RegionsView';
-import AddRegions from './components/addRegionsView';
+import ContactsComp from './components/contactsComp/ContactsView';
+import UsersComp from './components/usersComp/UsersView';
+import CompanyView from './components/companiesComp/companyView';
+import UserForm from './components/usersComp/newUserView';
+import NewCompany from './components/companiesComp/newCompanyView';
+import NewContacForm from './components/contactsComp/newContactForm';
+import RegionsView from './components/regionComps/RegionsView';
+import AddRegions from './components/regionComps/addRegionsView';
 // CONTEXTS
-import LogInProvider, { LogInContext } from '../src/context/logInContext';
+import { LogInContext } from '../src/context/logInContext';
 import UserFormProvider from '../src/context/usersFormContext';
 import UserTableProvider from '../src/context/userTableContext';
 import CompaniesProvider from '../src/context/companiesContext';
@@ -24,16 +24,12 @@ import RegionsProvider from '../src/context/regionsContext';
 function App() {
 
   const { isAuthenticated, userAdmin } = useContext(LogInContext)
-  // console.log('isAuthenticated')
-  // console.log('user admin: ' + userAdmin)
+
 
   if (!isAuthenticated) {
     return (
-      //agregar un if que si ya esta inciado sesion, haga redirect a        <Redirect to='/contacts' />
-
       <div className="App logIn">
         <BrowserRouter>
-          <Redirect to='' />
           <Login />
         </BrowserRouter>
 

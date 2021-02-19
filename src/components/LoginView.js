@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Card, Button } from 'react-bootstrap';
 import './css/login.css'
 import { LogInContext } from '../context/logInContext';

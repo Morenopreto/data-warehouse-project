@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext } from 'react';
 import { LogInContext } from './logInContext'
 import { UserTableContext } from './userTableContext';
 
@@ -8,9 +8,8 @@ export const RegionsContext = createContext();
 
 
 const RegionsProvider = ({ children }) => {
-    const { tokenState } = useContext(LogInContext);
+    const { tokenState, userHasAuthenticated } = useContext(LogInContext);
     const { GetCountryData } = useContext(UserTableContext);
-    const [allRegions, setAllRegions] = useState([]);
     const [fetchStatus, setFetchStatus] = useState(null)
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -20,7 +19,6 @@ const RegionsProvider = ({ children }) => {
     const addRegions = (data) => {
         setFetchStatus('fetching');
         var raw = JSON.stringify(data);
-        // myHeaders.append("Authorization", `Bearer ${tokenState}`);
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -31,39 +29,22 @@ const RegionsProvider = ({ children }) => {
         fetch(`http://localhost:9000/regions/newRegion`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                (!result.requestInfo[0]['error']) ?
-                    setFetchStatus(true) : setFetchStatus(false);
-                console.log(!result.requestInfo[0]['error'])
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
+                setFetchStatus(true)
+                GetCountryData()
             })
             .catch(error => {
                 console.log('error', error)
-
-                // setFetchStatus(false)
+                setFetchStatus(false);
             })
             .finally(() => { setTimeout(() => { setFetchStatus(null) }, 1500) })
 
     }
-    // pueded que no vaya porque esta GetCountryData desde usertable context.
-    const getAllRegions = () => {
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-        fetch(`http://localhost:9000/companies`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                setAllRegions(result.data)
-                console.log(result.data)
-            })
-            .catch(error => console.log('error', error));
-    }
 
     const modifyRegions = (id, where, changes) => {
-        console.log('changes')
-        console.log(changes)
-        console.log('changes')
         let raw = JSON.stringify(changes)
         var requestOptions = {
             method: 'PATCH',
@@ -75,9 +56,11 @@ const RegionsProvider = ({ children }) => {
         fetch(`http://localhost:9000/${where}/${id}/modify`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
                 GetCountryData()
-                // GetUserData(tokenState, 1)
             })
             .catch(error => console.log('error', error));
     }
@@ -91,10 +74,11 @@ const RegionsProvider = ({ children }) => {
         fetch(`http://localhost:9000/${where}/${id}/delete?eliminado=true`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
+                if (!result.data.isAuthenticated) {
+                    alert('Su sesion a expirado')
+                    return userHasAuthenticated(result.data.isAuthenticated)
+                }
                 GetCountryData()
-                // getAllRegions(tokenState, 1)
-
             })
             .catch(error => console.log('error', error));
     }
@@ -104,10 +88,8 @@ const RegionsProvider = ({ children }) => {
         <RegionsContext.Provider
             value={{
                 fetchStatus: fetchStatus,
-                allRegions: allRegions,
                 addRegions: addRegions,
                 modifyRegions: modifyRegions,
-                getAllRegions: getAllRegions,
                 deleteFromDB: deleteFromDB
 
             }}

@@ -1,7 +1,6 @@
 
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
-import { MdAirlineSeatLegroomReduced } from 'react-icons/md';
 import './inputs.css'
 
 function Inputs({ label, type, objectTag, getInfo, data, moreInformation, defaultValue }) {
@@ -53,7 +52,7 @@ function Inputs({ label, type, objectTag, getInfo, data, moreInformation, defaul
         return (
             <div className='interactive-input-ctn'>
                 {LabelTag}
-                <input placeholder={label} type={type} defaultValue={(!!defaultValue) ? defaultValue : ''} onClick={(e)=>e.preventDefault()} onChange={(e) => {showLabel(e); getInfo(objectTag, e.target.value)}} onBlur={(e) => { getInfo(objectTag, e.target.value) }} required ></input>
+                <input placeholder={label} type={type} defaultValue={(!!defaultValue) ? defaultValue : ''} onClick={(e) => e.preventDefault()} onChange={(e) => { showLabel(e); getInfo(objectTag, e.target.value) }} onBlur={(e) => { getInfo(objectTag, e.target.value) }} required ></input>
             </div >
         )
     }
@@ -67,11 +66,9 @@ function Inputs({ label, type, objectTag, getInfo, data, moreInformation, defaul
                     {data?.map((item, i) => (
 
                         <li key={i} className='sq-select-li' >
-
-                            {(!location.pathname.includes('modifyRegion')||!item.includes('Agregar')) ? (
+                            {(!item.includes('Agregar')) ? (
                                 <>
                                     <input
-
                                         className='sq-select-input'
                                         defaultChecked={(item === defaultValue) ? true : false}
                                         id={`${item}-${i}`}
