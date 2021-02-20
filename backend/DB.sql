@@ -72,8 +72,8 @@ CREATE TABLE `changes`{
     `modified_id`int NOT NULL
 }
 
-INSERT INTO users (name, surname, mail, admin, phone, active, pass) VALUES ('moreno', 'preto', 'moreno.preto@live.com', 1, 1165478821, 1, 123456);
-INSERT INTO users (name, surname, mail, admin, phone, active, pass) VALUES ('Gaspar', 'Aragon', 'gaspar.aragon@live.com', 1, 123123123, 1, 012345);
+INSERT INTO users (name, surname, mail, admin, phone, active, pass) VALUES ('admin', 'admin', 'admin@admin.com', 1, 1165478821, 1, 'admin');
+INSERT INTO users (name, surname, mail, admin, phone, active, pass) VALUES ('user', 'noAdmin', 'user@live.com', 1, 123123123, 1, 123456);
 INSERT INTO regions (region_name,active) VALUES ('Am. del norte',1);
 INSERT INTO regions (region_name,active) VALUES ('Am. del sur',1);
 INSERT INTO regions (region_name,active) VALUES ('CentroAmerica',1);
@@ -134,8 +134,5 @@ INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_
 
 INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('inaki', 'Igarreta', 'CFO','igarro@live.com','None',2,1,2,1);
 INSERT INTO contacts (name ,surname ,position ,mail ,interest ,company_id ,city_id ,user_id ,active) VALUES ('Mateo', 'Del Mastro', 'Sales Executive','el.macho@live.com','None',2,1,2,1);
-
-
-SELECT contacts.name, contacts.surname, contacts.position, contacts.mail, contacts.interest, cities.city_name, countries.country_name, regions.region_name, companies.company_name FROM contacts INNER JOIN cities ON contacts.city_id = cities.city_id INNER JOIN countries ON countries.country_id = cities.country_id  INNER JOIN regions ON countries.region_id = regions.region_id INNER JOIN companies ON companies.company_id = contacts.company_id WHERE contacts.active = 1 and user_id = ?
 
 
