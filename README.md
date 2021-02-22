@@ -8,6 +8,9 @@ Hola! Bienvenido a Data-warehouse.
 
 ### CLONACION DEL PROYECTO
 
+      > Elija una carpeta donde usted desea clonar el proyecto.
+      > Para una mejor ejeccucion tenga en cuenta estar el el directorio "/data-warehose-project" para la ejecuccion de los codigos de terminal.
+
     git clone https://github.com/Morenopreto/data-warehouse-project
 
 ### PREPARACION PARA EL USO
@@ -16,11 +19,19 @@ Para el proyecto se uso el framework de javascript REACT JS permitiendo una mejo
 
 **1** 
 Una vez clonado el proyecto, instale las dependencias para poder utilizar el mismo.
-Para ello, debe correr en el directorio de la terminal que se encuentra el package.json
+Para ello, debe correr en los siguiente direcorios, los codigos descriptos
+
+"../data-warehose-project/Frontend" el siguiente codigo.
+
+    npm install
+
+
+"../data-warehose-project/backend" el siguiente codigo.
 
     npm install
 
 ### INSTRUCCIONES
+
 
 Antes de iniciar DATA-WAREHOUSE usted debe considerar las siguientes pautas:
 **1** 
@@ -62,9 +73,10 @@ Si no tuvo ningun error en la ejecucion, la base de datos y sus tablas pertinent
 
 ## EJECUCION DATA_WAREHOUSE
 
+
 **1** Dentro de VS CODE abra una nueva terminal.
 
-**2** Una vez dentro de la carpeta donde se encuentra el proyecto DATA WAREHOUSE corra el codigo
+**2** Una vez dentro de la carpeta FRONTEND ("../data-warehose-project/Frontend") donde se encuentra el proyecto DATA WAREHOUSE corra el codigo
 
 
         npm start
@@ -77,7 +89,7 @@ Si no tuvo ningun error en la ejecucion, la base de datos y sus tablas pertinent
 
 **4** Una vez iniciado que corrio la aplicacion deberia abrir otra terminal paralela para correr el codigo que permite
 utilizar el backend.
-Sobre la carpeta donde se encuentra DATA_WAREHOUSE corra el siguiente codigo:
+usted deberia encontrarse en "../data-warehose-project". Corra el siguiente codigo:
 
         cd ./backedn
         node server
