@@ -64,13 +64,6 @@ CREATE TABLE `contacts`(
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `changes`{
-    `change_id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    `modified_date` datetime DEFAULT(getdate()),
-    `modified_by` varchar(30) NOT NULL,
-    `modified_table` varchar(30) NOT NULL,
-    `modified_id`int NOT NULL
-}
 
 INSERT INTO users (name, surname, mail, admin, phone, active, pass) VALUES ('admin', 'admin', 'admin@admin.com', 1, 1165478821, 1, 'admin');
 INSERT INTO users (name, surname, mail, admin, phone, active, pass) VALUES ('user', 'noAdmin', 'user@live.com', 1, 123123123, 1, 123456);
