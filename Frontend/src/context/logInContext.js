@@ -15,6 +15,7 @@ const LogInProvider = ({ children }) => {
     const [userMail, setUserMail] = useState(null);
     const [userAdmin, setUserAdmin] = useState(null);
     const [logInStatus, setLogInStatus] = useState(null);
+    const [logInFailed, setLogInFailed] = useState(null);
     // const [infoContactsPrueba, setInfoContactsPrueba] = useState([]);
     const [pagination, setPagination] = useState([]);
 
@@ -44,6 +45,11 @@ const LogInProvider = ({ children }) => {
             .then(response => response.json())
             .then(result => {
 
+                if (result.requestInfo.code === 401) {
+                    console.log('que tire errorf')
+                    setLogInStatus(null)
+                    setLogInFailed(true)
+                };
                 setTokenCallback(result.data.token, result.data.isAuthenticated, result.data.mail, result.data.admin)
                 if (!result.data.isAuthenticated) {
                     userHasAuthenticated(result.data.isAuthenticated)
@@ -102,12 +108,14 @@ const LogInProvider = ({ children }) => {
                 infoContacts: infoContacts,
                 pagination: pagination,
                 logInStatus: logInStatus,
+                logInFailed: logInFailed,
                 LogIn: LogIn,
                 isAuthenticated: isAuthenticated,
                 userHasAuthenticated: userHasAuthenticated,
                 setInfoContacts: setInfoContacts,
                 GetUserData: GetUserData,
-                setTokenCallback: setTokenCallback
+                setTokenCallback: setTokenCallback,
+                setLogInFailed:setLogInFailed
             }}
         >
             {children}

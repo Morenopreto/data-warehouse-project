@@ -40,3 +40,31 @@
   border-bottom: 3px solid rgba(90, 217, 172, 0.5);
 }
 
+.configuration {
+  position: absolute;
+  right: 80px;
+  margin: 10px;
+  padding: 15px;
+  background: white;
+  border-collapse: collapse;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0px 7px 9px 6px lightgrey;
+  display: flex;
+  
+}
+.configuration p {
+  text-decoration: none;
+  color: #273152;
+  font-weight: 400;
+  font-size: 1rem;
+  margin: 0;
+}
+.configuration p:hover {
+  color: #273152;
+  font-size: 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 3px solid rgba(90, 217, 172, 0.5);
+}

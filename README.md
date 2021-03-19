@@ -92,7 +92,7 @@ utilizar el backend.
 usted deberia encontrarse en "../data-warehose-project". Corra el siguiente codigo:
 
         cd ./backedn
-        node server
+        npm start
 
 
 
@@ -205,7 +205,7 @@ use the backend.
 you should be at "../data-warehose-project". Run the following code:
 
         cd ./backedn
-        node server
+        npm start
 
 
 
